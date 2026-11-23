@@ -38,7 +38,15 @@ made-up numbers with a "Sample data" banner. The deployed site uses live data.
 | `DATA_SOURCE` | No | Leave unset in Vercel. `sample` = made-up data. |
 | `POLYMARKET_WALLET` | No | Overrides the wallet address. |
 
-## Adding a domain later
+## Domain
 
-Vercel → Project → Settings → Domains → Add, then copy the DNS records it shows into your registrar.
-The `.vercel.app` address keeps working.
+Live at **https://blueringspm.com** (registered at Porkbun; DNS stays at Porkbun).
+
+| Porkbun DNS record | Value | Purpose |
+|---|---|---|
+| A, host blank | `216.198.79.1` | Points the domain at Vercel |
+| MX ×2, TXT `v=spf1 …` | Porkbun defaults | Email forwarding (optional) |
+
+Porkbun's URL forwarding must stay off, or it replaces the A record. Vercel issues the HTTPS certificate
+automatically. `blue-rings.vercel.app` can be set to redirect to the domain under Vercel → Settings → Domains.
+Logins are remembered per address, so a new address asks for the password once.
