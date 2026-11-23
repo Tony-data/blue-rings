@@ -1,8 +1,10 @@
-import { FlowField } from "@/components/flow-field";
 import { LocalTime } from "@/components/local-time";
+import { PillLink } from "@/components/pill-link";
+import { RingField } from "@/components/ring-field";
 import { monthYear, signedMoney } from "@/lib/format";
 import type { Portfolio } from "@/lib/types";
 
+/** Inner-page hero (investment logic): big title over the ring field. */
 export function PageHero({
   eyebrow,
   title,
@@ -22,8 +24,7 @@ export function PageHero({
     <section
       className={`relative flex flex-col justify-end overflow-hidden pt-32 pb-14 sm:pb-20 ${tall ? "min-h-[88svh]" : "min-h-[62svh]"}`}
     >
-      {/* fades in below the header so the menu stays clean */}
-      <FlowField className="absolute inset-0 h-full w-full [mask-image:linear-gradient(to_bottom,transparent_5rem,black_10rem)]" />
+      <RingField className="absolute inset-0 h-full w-full" />
       {/* soften the field into the page below */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-linear-to-b from-transparent to-paper" />
 
@@ -48,22 +49,42 @@ export function PageHero({
   );
 }
 
+/**
+ * Home page top: the interactive ring field with a solid blue panel
+ * overlapping its lower-right edge, holding the all-time profit.
+ */
 export function HomeHero({ data }: { data: Portfolio }) {
-  if (data.status !== "ok") {
-    return <PageHero eyebrow="Blue Rings · Polymarket portfolio" title="Blue Rings" subtitle={data.message} />;
-  }
-  const negative = data.totalProfit < 0;
   return (
-    <PageHero
-      eyebrow="All-time profit · Polymarket"
-      title={signedMoney(data.totalProfit)}
-      titleClassName={negative ? "text-slate" : "text-blue"}
-      subtitle={
-        <>
-          After fees, including rebates and rewards.
-          {data.startedAt ? <> Trading since {monthYear(data.startedAt)}.</> : null} Updated <LocalTime ms={data.fetchedAt} />.
-        </>
-      }
-    />
+    <section className="relative pt-18">
+      <div className="relative h-[62svh] max-h-[700px] min-h-[360px] overflow-hidden bg-paper">
+        <RingField className="absolute inset-0 h-full w-full [mask-image:linear-gradient(to_bottom,black_55%,transparent)]" />
+      </div>
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="relative -mt-36 ml-auto bg-blue px-7 py-10 text-white sm:-mt-56 sm:px-12 sm:py-14 md:w-[64%] lg:w-[56%]">
+          {data.status === "ok" ? (
+            <>
+              <p className="eyebrow text-white/75">All-time profit · Polymarket</p>
+              <h1 className="display mt-4 text-[clamp(3.25rem,8vw,6.75rem)] leading-[1.02]">{signedMoney(data.totalProfit)}</h1>
+              <p className="mt-5 max-w-md text-[1.05rem] leading-relaxed text-white/85">
+                After fees, including rebates and rewards.
+                {data.startedAt ? <> Trading since {monthYear(data.startedAt)}.</> : null} Updated <LocalTime ms={data.fetchedAt} />.
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="eyebrow text-white/75">Polymarket portfolio</p>
+              <h1 className="display mt-4 text-[clamp(3rem,7vw,5.5rem)] leading-[1.02]">Blue Rings</h1>
+              <p className="mt-5 max-w-md text-white/85">{data.message}</p>
+              <p className="mt-3 font-mono text-xs break-words text-white/70">Details: {data.reason}</p>
+            </>
+          )}
+          <div className="mt-9">
+            <PillLink href="/#performance" variant="light" arrow>
+              View performance
+            </PillLink>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

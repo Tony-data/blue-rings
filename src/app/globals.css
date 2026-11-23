@@ -18,6 +18,7 @@
   --blue: #0149fd; /* brand accent, profit */
   --blue-soft: #7fa4ff; /* blue on dark backgrounds */
   --blue-mist: #e9eefb; /* very light blue tint (menus) */
+  --blue-deep: #0037c4; /* pressed / hover blue */
   --on-ink: #dee1e0; /* text on dark sections */
   --on-ink-muted: #a4aaa2;
   --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
@@ -36,6 +37,7 @@
   --color-blue: var(--blue);
   --color-blue-soft: var(--blue-soft);
   --color-blue-mist: var(--blue-mist);
+  --color-blue-deep: var(--blue-deep);
   --color-on-ink: var(--on-ink);
   --color-on-ink-muted: var(--on-ink-muted);
   --font-sans: var(--font-geist-sans);
@@ -94,6 +96,84 @@ body {
   background: var(--paper);
   padding: 0.32em 0.18em 0.14em;
   margin-left: -0.18em;
+}
+
+/* ───────── Pill buttons (header and hero panel) ───────── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-radius: 999px;
+  padding: 0.8rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  transition:
+    background-color 0.3s var(--ease-out-soft),
+    color 0.3s var(--ease-out-soft),
+    box-shadow 0.3s var(--ease-out-soft),
+    transform 0.3s var(--ease-out-soft);
+}
+.pill:hover {
+  transform: translateY(-1px);
+}
+.pill:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+.pill-arrow {
+  display: inline-block;
+  transition: transform 0.35s var(--ease-out-soft);
+}
+.pill:hover .pill-arrow {
+  transform: translateX(3px);
+}
+.pill--solid {
+  background: var(--blue);
+  color: #fff;
+}
+.pill--solid:hover {
+  background: var(--blue-deep);
+  box-shadow: 0 10px 24px -12px rgb(1 73 253 / 0.7);
+}
+.pill--light {
+  background: #fff;
+  color: var(--blue);
+}
+.pill--light:hover {
+  background: var(--blue-mist);
+}
+.pill--outline {
+  box-shadow: inset 0 0 0 1px currentColor;
+  padding: 0.6rem 1.15rem;
+  font-size: 0.875rem;
+}
+.pill--outline:hover {
+  background: rgb(1 73 253 / 0.06);
+}
+
+/* Round icon button (mobile menu arrows) */
+.ring-btn {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px currentColor;
+  transition:
+    background-color 0.3s var(--ease-out-soft),
+    color 0.3s var(--ease-out-soft);
+}
+
+/* Animated underline for text links */
+.link-underline {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.4s var(--ease-out-soft);
+  padding-bottom: 2px;
+}
+.link-underline:hover,
+.link-underline:focus-visible,
+.link-underline[aria-current="page"] {
+  background-size: 100% 1px;
 }
 
 /* ───────── Scroll reveal (only when JS is running) ───────── */
@@ -401,7 +481,11 @@ body {
   .slash::before,
   .slash::after,
   .slash-btn,
-  .slash-btn::before {
+  .slash-btn::before,
+  .pill,
+  .pill-arrow,
+  .ring-btn,
+  .link-underline {
     transition: none;
   }
 }

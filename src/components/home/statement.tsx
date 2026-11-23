@@ -5,7 +5,7 @@ import { BANNER_PHOTO, STATEMENT } from "@/lib/site-config";
 /** Brand banner with a statement card overlapping it. */
 export function Statement() {
   return (
-    <section aria-label="About this portfolio" className="relative">
+    <section aria-label="About this portfolio" className="relative mt-20 sm:mt-28">
       <div className="relative h-[46svh] min-h-[300px] max-h-[560px]">
         <ParallaxImage src={BANNER_PHOTO} />
       </div>
