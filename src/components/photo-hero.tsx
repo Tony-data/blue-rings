@@ -1,18 +1,37 @@
 import type { ReactNode } from "react";
 import { ParallaxImage } from "./parallax-image";
+import { RingField } from "./ring-field";
 import { RippleWater } from "./ripple-water";
 import { BANNER_PHOTO } from "@/lib/site-config";
 
 /**
- * Full-width water photo (with ripples that follow the pointer) and a solid
- * blue panel overlapping its lower-right edge.
+ * Top-of-page hero: an interactive backdrop (the ring field, or the water
+ * photo with ripples) and a solid blue panel overlapping its lower-right edge.
  */
-export function PhotoHero({ children, short = false }: { children: ReactNode; short?: boolean }) {
+export function PhotoHero({
+  children,
+  media = "photo",
+  short = false,
+}: {
+  children: ReactNode;
+  media?: "photo" | "rings";
+  short?: boolean;
+}) {
   return (
     <section className="relative pt-18">
-      <div className={`relative overflow-hidden ${short ? "h-[38svh] min-h-[260px] max-h-[440px]" : "h-[62svh] min-h-[360px] max-h-[700px]"}`}>
-        <ParallaxImage src={BANNER_PHOTO} strength={0.12} priority />
-        <RippleWater className="absolute inset-0 h-full w-full" />
+      <div
+        className={`relative overflow-hidden ${media === "rings" ? "bg-paper" : ""} ${
+          short ? "h-[38svh] min-h-[260px] max-h-[440px]" : "h-[62svh] min-h-[360px] max-h-[700px]"
+        }`}
+      >
+        {media === "rings" ? (
+          <RingField className="absolute inset-0 h-full w-full [mask-image:linear-gradient(to_bottom,black_55%,transparent)]" />
+        ) : (
+          <>
+            <ParallaxImage src={BANNER_PHOTO} strength={0.12} priority />
+            <RippleWater className="absolute inset-0 h-full w-full" />
+          </>
+        )}
       </div>
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
         <div

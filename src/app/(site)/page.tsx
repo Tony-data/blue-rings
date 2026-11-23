@@ -1,5 +1,4 @@
 import { LocalTime } from "@/components/local-time";
-import { LogicBand } from "@/components/home/logic-band";
 import { StatsRow } from "@/components/home/stats-row";
 import { PhotoHero } from "@/components/photo-hero";
 import { PillLink } from "@/components/pill-link";
@@ -15,7 +14,7 @@ export default async function Home() {
 
   return (
     <>
-      <PhotoHero>
+      <PhotoHero media="rings">
         {data.status === "ok" ? (
           <>
             <p className="eyebrow text-white/75">All-time profit · Polymarket</p>
@@ -81,7 +80,16 @@ export default async function Home() {
         </>
       )}
 
-      <LogicBand />
+      <section aria-labelledby="logic-title" className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
+        <SectionIntro id="logic-title" title="Investment logic">
+          <p className="max-w-xl text-lg leading-relaxed text-ink-2">
+            How I pick markets, find an edge, size positions and manage risk.
+          </p>
+          <PillLink href="/investment-logic" arrow>
+            Read the investment logic
+          </PillLink>
+        </SectionIntro>
+      </section>
     </>
   );
 }

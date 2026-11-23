@@ -177,35 +177,9 @@ body {
 .js [data-reveal="up"] {
   transform: translate3d(0, 28px, 0);
 }
-/* "draw": the wrapper's child wipes in from the left (dashed trajectory line).
-   The clip sits on the child so the observed wrapper still counts as visible. */
-.js [data-reveal="draw"] {
-  opacity: 1;
-}
-.js [data-reveal="draw"] > * {
-  clip-path: inset(0 100% 0 0);
-  transition: clip-path 1.8s var(--ease-out-soft);
-  transition-delay: var(--reveal-delay, 0ms);
-}
 .js [data-reveal].is-in {
   opacity: 1;
   transform: none;
-}
-.js [data-reveal="draw"].is-in > * {
-  clip-path: inset(0 0 0 0);
-}
-
-/* Trajectory dots gently pulse */
-.pulse-dot {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: pulse-dot 2.8s ease-in-out infinite;
-}
-@keyframes pulse-dot {
-  50% {
-    transform: scale(1.35);
-    opacity: 0.75;
-  }
 }
 
 /* Mobile menu items rise in one after another */
@@ -319,14 +293,11 @@ body {
   html {
     scroll-behavior: auto;
   }
-  .js [data-reveal],
-  .js [data-reveal="draw"] > * {
+  .js [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
-    clip-path: none !important;
     transition: none !important;
   }
-  .pulse-dot,
   .menu-item {
     animation: none;
   }
@@ -341,10 +312,8 @@ body {
 }
 
 @media print {
-  .js [data-reveal],
-  .js [data-reveal="draw"] > * {
+  .js [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
-    clip-path: none !important;
   }
 }
