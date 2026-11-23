@@ -12,8 +12,9 @@ Open positions are never fetched or shown.
   each `##` heading becomes a numbered section, an entry in the page's contents list and a footer link.
 - **Contact details, statement and disclaimer:** edit [`src/lib/site-config.ts`](src/lib/site-config.ts) (currently placeholders).
 - **Brand assets:** originals in `Branding/`. The web-ready versions are in `public/brand/`.
-- **Banner photo:** Bondi Beach, Sydney, by [Road Trip with Raj](https://unsplash.com/photos/aerial-view-of-body-of-water-Q-lzt8Uz4Eo)
-  on Unsplash (free under the [Unsplash License](https://unsplash.com/license)). Swap it in `src/lib/site-config.ts`.
+- **Banner photo:** `Branding/Tony's photo of Aus Water.jpg` (Bondi, Sydney), resized to `public/brand/bondi-water.webp`.
+  The same image is on Unsplash as [Q-lzt8Uz4Eo](https://unsplash.com/photos/aerial-view-of-body-of-water-Q-lzt8Uz4Eo),
+  whose licence doesn't require a credit. Swap it in `src/lib/site-config.ts`.
 - **Motion:** the dash-field hero, scroll reveals, count-ups and parallax all switch off for visitors who've asked their
   device to reduce motion.
 

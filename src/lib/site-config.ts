@@ -19,15 +19,10 @@ export const CONTACT = {
 };
 
 /**
- * Photo behind the statement card. Free under the Unsplash License
- * (https://unsplash.com/license); credit is appreciated, not required.
+ * Photo behind the statement card (Bondi, Sydney), made from
+ * Branding/Tony's photo of Aus Water.jpg. Shown without a credit.
  */
-export const BANNER_PHOTO = {
-  src: "/brand/bondi-water.webp",
-  caption: "Bondi Beach, Sydney",
-  credit: "Road Trip with Raj / Unsplash",
-  creditUrl: "https://unsplash.com/photos/aerial-view-of-body-of-water-Q-lzt8Uz4Eo",
-};
+export const BANNER_PHOTO = "/brand/bondi-water.webp";
 
 /** The statement over the banner on the home page. */
 export const STATEMENT =

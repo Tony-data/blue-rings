@@ -36,10 +36,10 @@ export function PageHero({
           <p className="eyebrow text-blue">
             <span className="knockout">{eyebrow}</span>
           </p>
-          <h1 className={`display mt-7 leading-[1] sm:mt-9 ${titleSize} ${titleClassName}`}>
-            <span className="knockout">{title}</span>
+          <h1 className={`display mt-3 leading-[1] sm:mt-4 ${titleSize} ${titleClassName}`}>
+            <span className="knockout-block">{title}</span>
           </h1>
-          <p className="mt-7 max-w-3xl text-[clamp(1.05rem,1.7vw,1.4rem)] leading-[1.75] tracking-[0.03em] text-blue">
+          <p className="mt-5 max-w-3xl text-[clamp(1.05rem,1.7vw,1.4rem)] leading-[1.75] tracking-[0.03em] text-blue">
             <span className="knockout">{subtitle}</span>
           </p>
         </div>

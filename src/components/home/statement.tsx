@@ -7,13 +7,7 @@ export function Statement() {
   return (
     <section aria-label="About this portfolio" className="relative">
       <div className="relative h-[46svh] min-h-[300px] max-h-[560px]">
-        <ParallaxImage src={BANNER_PHOTO.src} />
-        <p className="absolute top-4 right-4 rounded-full bg-ink/45 px-3 py-1 text-[0.7rem] text-white/90 backdrop-blur-sm sm:top-6 sm:right-6">
-          {BANNER_PHOTO.caption} · Photo:{" "}
-          <a href={BANNER_PHOTO.creditUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-white">
-            {BANNER_PHOTO.credit}
-          </a>
-        </p>
+        <ParallaxImage src={BANNER_PHOTO} />
       </div>
       <div className="relative -mt-32 sm:-mt-48">
         {/* the card: runs from the left edge to just short of the right, with one big rounded corner */}
