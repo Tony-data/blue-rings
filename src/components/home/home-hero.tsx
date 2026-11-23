@@ -32,6 +32,55 @@ export function RingPanelHero({ children, short = false }: { children: ReactNode
   );
 }
 
+/**
+ * Inner-page hero (investment logic): big title over the ring field, with a
+ * "Scroll" cue. The title sits in a solid box — blue with white text, or
+ * paper with blue text — so the rings never run through it.
+ */
+export function PageHero({
+  eyebrow,
+  title,
+  subtitle,
+  titleBox = "blue",
+  titleSize = "text-[clamp(4rem,13vw,11rem)]",
+  tall = true,
+}: {
+  eyebrow: string;
+  title: ReactNode;
+  subtitle: ReactNode;
+  titleBox?: "blue" | "paper";
+  titleSize?: string;
+  tall?: boolean;
+}) {
+  return (
+    <section
+      className={`relative flex flex-col justify-end overflow-hidden pt-32 pb-14 sm:pb-20 ${tall ? "min-h-[88svh]" : "min-h-[62svh]"}`}
+    >
+      <RingField className="absolute inset-0 h-full w-full" />
+      {/* soften the field into the page below */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-linear-to-b from-transparent to-paper" />
+
+      <div className="relative mx-auto flex w-full max-w-7xl gap-6 px-5 sm:gap-10 sm:px-8">
+        <div aria-hidden className="hidden flex-col items-center gap-4 self-end sm:flex">
+          <span className="eyebrow rotate-180 text-blue [writing-mode:vertical-rl]">Scroll</span>
+          <span className="scroll-cue-line" />
+        </div>
+        <div className="min-w-0">
+          <p className="eyebrow text-blue">
+            <span className="knockout">{eyebrow}</span>
+          </p>
+          <h1 className={`display mt-3 leading-[1] text-blue sm:mt-4 ${titleSize}`}>
+            <span className={titleBox === "blue" ? "knockout-block knockout-block--blue" : "knockout-block"}>{title}</span>
+          </h1>
+          <p className="mt-5 max-w-3xl text-[clamp(1.05rem,1.7vw,1.4rem)] leading-[1.75] tracking-[0.03em] text-blue">
+            <span className="knockout">{subtitle}</span>
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /** Home page version: the all-time profit. */
 export function HomeHero({ data }: { data: Portfolio }) {
   return (
