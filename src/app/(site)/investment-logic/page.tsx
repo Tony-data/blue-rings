@@ -15,6 +15,7 @@ export default async function InvestmentLogicPage() {
     <>
       <PageHero
         tall={false}
+        titleSize="text-[clamp(2.6rem,9vw,8rem)]"
         eyebrow="Blue Rings · How I trade"
         title="Investment logic"
         subtitle="How I find, size and manage positions."

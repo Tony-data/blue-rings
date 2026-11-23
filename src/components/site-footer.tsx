@@ -46,10 +46,11 @@ export async function SiteFooter() {
           </div>
         </div>
 
+        {/* "Blue Rings" is ~4.49em wide in the display serif: sized to fill the content width. */}
         <p
           aria-hidden
           data-reveal="up"
-          className="display mt-24 -ml-[0.04em] select-none whitespace-nowrap pb-[0.16em] text-[clamp(5rem,24.5vw,22.75rem)] leading-[0.82] text-blue sm:mt-32"
+          className="display mt-24 -ml-[0.03em] select-none whitespace-nowrap pb-[0.12em] text-[calc((100vw-2.5rem)/4.6)] leading-[0.85] text-blue sm:mt-32 sm:text-[min(calc((100vw-4rem)/4.6),16.75rem)]"
         >
           Blue Rings
         </p>

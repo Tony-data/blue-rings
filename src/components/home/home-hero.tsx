@@ -8,12 +8,14 @@ export function PageHero({
   title,
   subtitle,
   titleClassName = "text-blue",
+  titleSize = "text-[clamp(4rem,13vw,11rem)]",
   tall = true,
 }: {
   eyebrow: string;
   title: React.ReactNode;
   subtitle: React.ReactNode;
   titleClassName?: string;
+  titleSize?: string;
   tall?: boolean;
 }) {
   return (
@@ -34,7 +36,7 @@ export function PageHero({
           <p className="eyebrow text-blue">
             <span className="knockout">{eyebrow}</span>
           </p>
-          <h1 className={`display mt-5 text-[clamp(4.25rem,15vw,12.5rem)] leading-[0.9] ${titleClassName}`}>
+          <h1 className={`display mt-7 leading-[1] sm:mt-9 ${titleSize} ${titleClassName}`}>
             <span className="knockout">{title}</span>
           </h1>
           <p className="mt-7 max-w-3xl text-[clamp(1.05rem,1.7vw,1.4rem)] leading-[1.75] tracking-[0.03em] text-blue">

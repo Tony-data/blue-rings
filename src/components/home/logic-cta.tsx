@@ -12,7 +12,7 @@ export function LogicCta({ index }: { index: string }) {
         <p data-reveal="up" className="eyebrow text-white/80">
           {index} / How I trade
         </p>
-        <h2 id="logic-cta-title" data-reveal="up" className="display mt-4 text-[clamp(3rem,8vw,7.25rem)] leading-[0.95]">
+        <h2 id="logic-cta-title" data-reveal="up" className="display mt-4 text-[clamp(2.6rem,7.5vw,6.5rem)] leading-[1]">
           Investment logic
         </h2>
         <p

@@ -53,7 +53,7 @@ export function SiteHeader({ sample }: { sample: boolean }) {
                     href={item.href}
                     onClick={close}
                     aria-current={item.href === pathname ? "page" : undefined}
-                    className="group inline-flex items-center gap-3 text-[2.6rem] leading-tight text-blue display"
+                    className="group inline-flex items-center gap-3 text-[2.2rem] leading-tight text-blue display"
                   >
                     {item.label}
                     <span className="slash scale-150" aria-hidden />
@@ -88,7 +88,7 @@ export function SiteHeader({ sample }: { sample: boolean }) {
         <div className="mx-auto flex h-18 max-w-7xl items-center gap-10 px-5 sm:px-8">
           <Link href="/" onClick={close} className="flex shrink-0 items-center gap-2.5" aria-label="Blue Rings home">
             <Image src="/brand/mark.png" alt="" width={36} height={31} className="h-7 w-auto" priority />
-            <span className="display text-[1.65rem] leading-none text-blue">Blue Rings</span>
+            <span className="display text-[1.45rem] leading-none text-blue">Blue Rings</span>
           </Link>
 
           <nav aria-label="Main" className="hidden lg:block">

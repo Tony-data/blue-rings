@@ -13,7 +13,7 @@ export function Statement() {
         {/* the card: runs from the left edge to just short of the right, with one big rounded corner */}
         <div aria-hidden className="absolute inset-y-0 left-0 right-[5%] rounded-tr-[56px] bg-paper sm:rounded-tr-[96px]" />
         <div className="relative mx-auto max-w-7xl px-5 pt-14 pb-4 sm:px-8 sm:pt-20">
-          <p data-reveal="up" className="display max-w-5xl pr-[5%] text-[clamp(2rem,4.4vw,3.9rem)] leading-[1.08] text-blue">
+          <p data-reveal="up" className="display max-w-6xl pr-[5%] text-[clamp(1.75rem,3.7vw,3.25rem)] leading-[1.15] text-blue">
             {STATEMENT}
           </p>
           <div data-reveal="up" style={{ "--reveal-delay": "140ms" } as React.CSSProperties} className="mt-10">

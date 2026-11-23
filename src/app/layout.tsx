@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,10 +12,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
-  weight: "400",
+// Display serif: wide, steady proportions with lining figures; the optical-size
+// axis gives large headlines finer detail automatically.
+const displaySerif = Newsreader({
+  variable: "--font-display-serif",
   style: ["normal", "italic"],
+  axes: ["opsz"],
   subsets: ["latin"],
 });
 
@@ -31,7 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${displaySerif.variable} h-full antialiased`}
     >
       <head>
         {/* Lets CSS hide scroll-reveal content only when JavaScript can reveal it again. */}

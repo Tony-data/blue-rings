@@ -40,7 +40,7 @@
   --color-on-ink-muted: var(--on-ink-muted);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-instrument-serif);
+  --font-serif: var(--font-display-serif);
 }
 
 html {
@@ -74,9 +74,9 @@ body {
 
 /* Large display type */
 .display {
-  font-family: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  font-family: var(--font-display-serif), ui-serif, Georgia, serif;
   font-weight: 400;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.022em;
 }
 
 /* Text that sits on the hero's dash field gets a paper "knockout" behind each line */
@@ -299,7 +299,7 @@ body {
 .logic-prose h2 {
   counter-increment: section;
   margin-top: 5rem;
-  font-family: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  font-family: var(--font-display-serif), ui-serif, Georgia, serif;
   font-weight: 400;
   font-size: clamp(2.1rem, 4vw, 3rem);
   line-height: 1.05;
@@ -356,7 +356,7 @@ body {
 .logic-prose blockquote {
   border-left: 2px solid var(--blue);
   padding-left: 1em;
-  font-family: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  font-family: var(--font-display-serif), ui-serif, Georgia, serif;
   font-size: 1.5rem;
   line-height: 1.35;
   color: var(--ink);
