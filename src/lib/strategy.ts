@@ -1,9 +1,9 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { cacheLife } from "next/cache";
-import { Marked } from "marked";
+import { Marked, type Token, type TokensList } from "marked";
 
-export type Heading = { id: string; text: string };
+export type LogicSection = { id: string; title: string; html: string };
 
 function slugify(text: string): string {
   return (
@@ -17,35 +17,43 @@ function slugify(text: string): string {
 }
 
 /**
- * Reads content/strategy.md (your own words), renders it to HTML and lists
- * its ## headings for the contents panel and footer links.
+ * Reads content/strategy.md (your own words) and splits it at each `##`
+ * heading. Each section becomes one row of the investment logic accordion
+ * and one footer link. Anything before the first heading becomes the intro.
  */
-export async function getStrategy(): Promise<{ html: string; headings: Heading[] }> {
+export async function getStrategy(): Promise<{ intro: string; sections: LogicSection[] }> {
   "use cache";
   cacheLife("max");
 
   const file = path.join(process.cwd(), "content", "strategy.md");
   const markdown = await readFile(file, "utf8");
+  const marked = new Marked();
+  const tokens = marked.lexer(markdown);
 
-  const headings: Heading[] = [];
+  const render = (list: Token[]) => {
+    const withLinks = Object.assign([...list], { links: (tokens as TokensList).links }) as TokensList;
+    return marked.parser(withLinks);
+  };
+
+  const introTokens: Token[] = [];
+  const raw: { title: string; tokens: Token[] }[] = [];
+  for (const token of tokens) {
+    if (token.type === "heading" && token.depth === 2) {
+      raw.push({ title: token.text.replace(/[*_`]/g, "").trim(), tokens: [] });
+    } else if (raw.length) {
+      raw[raw.length - 1].tokens.push(token);
+    } else {
+      introTokens.push(token);
+    }
+  }
+
   const seen = new Map<string, number>();
-
-  const marked = new Marked({
-    renderer: {
-      heading({ tokens, depth, text }) {
-        const inner = this.parser.parseInline(tokens);
-        if (depth !== 2) return `<h${depth}>${inner}</h${depth}>\n`;
-        const plain = text.replace(/[*_`]/g, "").trim();
-        const base = slugify(plain);
-        const count = seen.get(base) ?? 0;
-        seen.set(base, count + 1);
-        const id = count ? `${base}-${count + 1}` : base;
-        headings.push({ id, text: plain });
-        return `<h2 id="${id}" data-reveal="up">${inner}</h2>\n`;
-      },
-    },
+  const sections = raw.map(({ title, tokens: body }) => {
+    const base = slugify(title);
+    const count = seen.get(base) ?? 0;
+    seen.set(base, count + 1);
+    return { id: count ? `${base}-${count + 1}` : base, title, html: render(body) };
   });
 
-  const html = await marked.parse(markdown);
-  return { html, headings };
+  return { intro: render(introTokens), sections };
 }

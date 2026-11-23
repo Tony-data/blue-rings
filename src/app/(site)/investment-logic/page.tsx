@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import { PageHero } from "@/components/home/home-hero";
-import { SlashLink } from "@/components/slash-link";
-import { Toc } from "@/components/toc";
+import { LogicAccordion } from "@/components/logic-accordion";
+import { PhotoHero } from "@/components/photo-hero";
+import { PillLink } from "@/components/pill-link";
+import { SectionIntro } from "@/components/section-intro";
+import { LOGIC_INTRO } from "@/lib/site-config";
 import { getStrategy } from "@/lib/strategy";
 
 export const metadata: Metadata = {
@@ -9,29 +11,32 @@ export const metadata: Metadata = {
 };
 
 export default async function InvestmentLogicPage() {
-  const { html, headings } = await getStrategy();
+  const { intro, sections } = await getStrategy();
 
   return (
     <>
-      <PageHero
-        tall={false}
-        titleSize="text-[clamp(2.6rem,9vw,8rem)]"
-        eyebrow="Blue Rings · How I trade"
-        title="Investment logic"
-        subtitle="How I find, size and manage positions."
-      />
+      <PhotoHero short>
+        <p className="eyebrow text-white/75">Blue Rings · How I trade</p>
+        <h1 className="display mt-4 text-[clamp(2.6rem,6vw,5rem)] leading-[1.04]">Investment logic</h1>
+        <p className="mt-4 max-w-md text-[1.05rem] leading-relaxed text-white/85">How I find, size and manage positions.</p>
+      </PhotoHero>
 
-      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
-        <div className="grid gap-12 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-20">
-          <aside className="lg:self-start lg:sticky lg:top-28">
-            <Toc items={headings} />
-          </aside>
-          {/* Content is the site owner's own markdown file (content/strategy.md). */}
-          <article className="logic-prose max-w-3xl" dangerouslySetInnerHTML={{ __html: html }} />
-        </div>
+      <section className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-28">
+        <SectionIntro title={<>{sections.length} parts of the process.</>}>
+          <p className="max-w-xl text-lg leading-relaxed text-ink-2">{LOGIC_INTRO}</p>
+          {/* Optional text before the first ## heading in content/strategy.md */}
+          {intro.trim() && <div className="logic-prose max-w-xl" dangerouslySetInnerHTML={{ __html: intro }} />}
+        </SectionIntro>
+      </section>
 
-        <div className="mt-24 flex flex-wrap items-center gap-6 border-t border-blue/25 pt-10 lg:ml-[20rem]">
-          <SlashLink href="/#performance">See the track record</SlashLink>
+      <section aria-label="Investment logic sections" className="bg-band py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8">
+          <LogicAccordion sections={sections} />
+          <div className="mt-14">
+            <PillLink href="/#performance" arrow>
+              See the track record
+            </PillLink>
+          </div>
         </div>
       </section>
     </>

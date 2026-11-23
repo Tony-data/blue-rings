@@ -15,7 +15,7 @@ export default function ErrorPage({ retry }: { error: Error & { digest?: string 
         <button
           type="button"
           onClick={() => retry()}
-          className="mt-6 rounded-lg bg-ink px-4 py-2.5 font-medium text-white transition hover:bg-ink-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue"
+          className="pill pill--solid mt-6"
         >
           Try again
         </button>

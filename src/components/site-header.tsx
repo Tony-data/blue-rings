@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { logout } from "@/app/actions";
+import { ArrowRight } from "@/components/icons";
 import { NAV } from "@/lib/site-config";
 
 const subscribeScroll = (onChange: () => void) => {
@@ -14,7 +15,7 @@ const subscribeScroll = (onChange: () => void) => {
 const useScrolled = () =>
   useSyncExternalStore(
     subscribeScroll,
-    () => window.scrollY > 16,
+    () => window.scrollY > 8,
     () => false,
   );
 
@@ -39,33 +40,34 @@ export function SiteHeader({ sample }: { sample: boolean }) {
   }, [open]);
 
   const close = () => setOpen(false);
+  const dark = open;
 
   return (
     <header className="fixed inset-x-0 top-0 z-40">
-      {/* Full-screen mobile menu (sits behind the bar so the logo and close button stay on top) */}
       {open && (
-        <div id="mobile-menu" className="fixed inset-0 flex flex-col bg-blue-mist px-5 pt-28 pb-10 sm:px-8 lg:hidden">
+        <div id="mobile-menu" className="fixed inset-0 flex flex-col bg-ink px-5 pt-28 pb-10 text-white sm:px-8 lg:hidden">
           <nav aria-label="Main">
-            <ul className="space-y-3">
+            <ul className="border-t border-white/15">
               {[{ href: "/", label: "Overview" }, ...NAV].map((item, i) => (
-                <li key={item.href} className="menu-item" style={{ "--d": `${60 + i * 60}ms` } as React.CSSProperties}>
+                <li key={item.href} className="menu-item border-b border-white/15" style={{ "--d": `${60 + i * 60}ms` } as React.CSSProperties}>
                   <Link
                     href={item.href}
                     onClick={close}
                     aria-current={item.href === pathname ? "page" : undefined}
-                    className="group inline-flex items-center gap-3 text-[2.2rem] leading-tight text-blue display"
+                    className="group flex items-center justify-between py-5 text-[1.9rem] leading-tight display"
                   >
                     {item.label}
-                    <span className="slash scale-150" aria-hidden />
+                    <span className="ring-btn size-11 text-white/80 group-hover:bg-white group-hover:text-ink">
+                      <ArrowRight />
+                    </span>
                   </Link>
                 </li>
               ))}
             </ul>
           </nav>
           <form action={logout} className="menu-item mt-auto" style={{ "--d": "320ms" } as React.CSSProperties}>
-            <button type="submit" className="group inline-flex items-center gap-1 text-lg text-blue">
+            <button type="submit" className="pill pill--light">
               Lock site
-              <span className="slash" aria-hidden />
             </button>
           </form>
         </div>
@@ -81,37 +83,37 @@ export function SiteHeader({ sample }: { sample: boolean }) {
       )}
 
       <div
-        className={`relative border-b transition-[background-color,border-color] duration-500 ${
-          scrolled && !open ? "border-line/80 bg-paper/85 backdrop-blur-md" : "border-transparent"
+        className={`relative border-b transition-[background-color,border-color,box-shadow] duration-500 ${
+          dark
+            ? "border-transparent bg-transparent text-white"
+            : `bg-paper text-ink ${scrolled ? "border-line shadow-[0_8px_24px_-20px_rgba(14,23,30,0.5)]" : "border-transparent"}`
         }`}
       >
         <div className="mx-auto flex h-18 max-w-7xl items-center gap-10 px-5 sm:px-8">
           <Link href="/" onClick={close} className="flex shrink-0 items-center gap-2.5" aria-label="Blue Rings home">
-            <Image src="/brand/mark.png" alt="" width={36} height={31} className="h-7 w-auto" priority />
-            <span className="display text-[1.45rem] leading-none text-blue">Blue Rings</span>
+            <Image src={dark ? "/brand/mark-white.png" : "/brand/mark.png"} alt="" width={36} height={31} className="h-7 w-auto" priority />
+            <span className={`display text-[1.45rem] leading-none ${dark ? "text-white" : "text-ink"}`}>Blue Rings</span>
           </Link>
 
-          <nav aria-label="Main" className="hidden lg:block">
-            <ul className="flex items-center gap-5">
+          <nav aria-label="Main" className="ml-auto hidden lg:block">
+            <ul className="flex items-center gap-9">
               {NAV.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
                     aria-current={item.href === pathname ? "page" : undefined}
-                    className="group inline-flex items-center gap-1 text-[0.95rem] text-blue"
+                    className="link-underline text-[0.95rem] font-medium text-ink-2 transition-colors hover:text-blue aria-[current=page]:text-blue"
                   >
                     {item.label}
-                    <span className="slash" aria-hidden />
                   </Link>
                 </li>
               ))}
             </ul>
           </nav>
 
-          <form action={logout} className="ml-auto hidden lg:block">
-            <button type="submit" className="group inline-flex items-center gap-1 text-[0.95rem] text-blue" title="Lock the site on this device">
+          <form action={logout} className="hidden lg:block">
+            <button type="submit" className="pill pill--outline text-blue" title="Lock the site on this device">
               Lock
-              <span className="slash" aria-hidden />
             </button>
           </form>
 
@@ -120,16 +122,12 @@ export function SiteHeader({ sample }: { sample: boolean }) {
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-controls="mobile-menu"
-            className="ml-auto inline-flex items-center gap-3 text-[0.95rem] text-blue lg:hidden"
+            className={`ml-auto inline-flex items-center gap-3 text-[0.95rem] font-medium lg:hidden ${dark ? "text-white" : "text-ink"}`}
           >
             {open ? "Close" : "Menu"}
             <span className="relative block h-3 w-6" aria-hidden>
-              <span
-                className={`absolute left-0 h-px w-6 bg-current transition-transform duration-300 ${open ? "top-1.5 rotate-45" : "top-0"}`}
-              />
-              <span
-                className={`absolute left-0 h-px w-6 bg-current transition-transform duration-300 ${open ? "top-1.5 -rotate-45" : "top-3"}`}
-              />
+              <span className={`absolute left-0 h-px w-6 bg-current transition-transform duration-300 ${open ? "top-1.5 rotate-45" : "top-0"}`} />
+              <span className={`absolute left-0 h-px w-6 bg-current transition-transform duration-300 ${open ? "top-1.5 -rotate-45" : "top-3"}`} />
             </span>
           </button>
         </div>

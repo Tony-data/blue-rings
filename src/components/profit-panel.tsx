@@ -12,6 +12,7 @@ import {
   YAxis,
   type TooltipContentProps,
 } from "recharts";
+import { ArrowRight } from "@/components/icons";
 import { compactMoney, monthYear, pnlTone, shortDate, signedMoney } from "@/lib/format";
 import type { PnlPoint } from "@/lib/types";
 
@@ -60,42 +61,36 @@ export function ProfitPanel({ series }: { series: PnlPoint[] }) {
   return (
     <div>
       {/* Filter row: sits above the chart and scopes everything below it */}
-      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-y border-blue/25 py-3">
-        <div role="group" aria-label="Time range" className="flex flex-wrap items-center">
-          {RANGES.map((r, i) => (
-            <span key={r.key} className="inline-flex items-center">
-              {i > 0 && (
-                <span aria-hidden className="mx-1.5 text-stone">
-                  /
-                </span>
-              )}
-              <button
-                type="button"
-                onClick={() => setRange(r.key)}
-                aria-pressed={range === r.key}
-                className={`min-w-10 px-1.5 py-1.5 text-sm transition-colors duration-300 ${
-                  range === r.key
-                    ? "text-blue underline decoration-blue decoration-1 underline-offset-[6px]"
-                    : "text-slate hover:text-ink"
-                }`}
-              >
-                {r.label}
-              </button>
-            </span>
+      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
+        <div role="group" aria-label="Time range" className="inline-flex rounded-full bg-surface p-1 shadow-[inset_0_0_0_1px_var(--line)]">
+          {RANGES.map((r) => (
+            <button
+              key={r.key}
+              type="button"
+              onClick={() => setRange(r.key)}
+              aria-pressed={range === r.key}
+              className={`min-w-12 rounded-full px-3.5 py-2 text-sm font-medium transition-colors duration-300 ${
+                range === r.key ? "bg-blue text-white" : "text-slate hover:text-ink"
+              }`}
+            >
+              {r.label}
+            </button>
           ))}
         </div>
         <button
           type="button"
           onClick={() => setShowTable((v) => !v)}
           aria-expanded={showTable}
-          className="group inline-flex items-center gap-1 text-sm text-blue"
+          className="group inline-flex items-center gap-1.5 text-sm font-medium text-blue"
         >
-          {showTable ? "Show chart" : "View as table"}
-          <span className="slash" aria-hidden />
+          <span className="link-underline">{showTable ? "Show chart" : "View as table"}</span>
+          <span className="transition-transform duration-300 group-hover:translate-x-1">
+            <ArrowRight />
+          </span>
         </button>
       </div>
 
-      <div className="pt-8">
+      <div className="mt-6 border-t border-line pt-8">
         <p className="flex flex-wrap items-baseline gap-x-3">
           <span className={`display text-[clamp(2.75rem,5vw,4rem)] leading-none ${pnlTone(change)}`}>
             {signedMoney(change)}

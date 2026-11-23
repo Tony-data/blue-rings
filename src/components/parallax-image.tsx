@@ -4,7 +4,17 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 
 /** A full-bleed image that drifts slightly slower than the page as you scroll. */
-export function ParallaxImage({ src, strength = 0.18 }: { src: string; strength?: number }) {
+export function ParallaxImage({
+  src,
+  strength = 0.18,
+  priority = false,
+  position = "center",
+}: {
+  src: string;
+  strength?: number;
+  priority?: boolean;
+  position?: string;
+}) {
   const frame = useRef<HTMLDivElement>(null);
   const layer = useRef<HTMLDivElement>(null);
 
@@ -36,7 +46,7 @@ export function ParallaxImage({ src, strength = 0.18 }: { src: string; strength?
   return (
     <div ref={frame} className="absolute inset-0 overflow-hidden" aria-hidden>
       <div ref={layer} className="absolute inset-x-0 -top-[18%] -bottom-[18%] will-change-transform">
-        <Image src={src} alt="" fill sizes="100vw" className="object-cover object-center" />
+        <Image src={src} alt="" fill priority={priority} sizes="100vw" className="object-cover" style={{ objectPosition: position }} />
       </div>
     </div>
   );

@@ -7,8 +7,10 @@
 */
 :root {
   --paper: #f4f5f3; /* page background (jacket white) */
+  --band: #ebedea; /* alternate section background, one step down from paper */
   --surface: #fbfbfa; /* cards */
   --line: #dee1e0; /* borders, dividers */
+  --line-strong: #c9cdca; /* dividers on the band background */
   --grid: #e7e9e7; /* chart gridlines — one step off the card */
   --stone: #989c94; /* decorative concrete grey (not for text) */
   --muted: #646a64; /* tertiary text, 5:1 on paper */
@@ -16,17 +18,21 @@
   --ink-2: #2a3238; /* strong secondary */
   --ink: #0e171e; /* headings, dark sections (sleeves) */
   --blue: #0149fd; /* brand accent, profit */
+  --blue-deep: #0037c4; /* pressed / hover blue */
   --blue-soft: #7fa4ff; /* blue on dark backgrounds */
-  --blue-mist: #e9eefb; /* very light blue tint (menus) */
+  --blue-mist: #e9eefb; /* very light blue tint */
   --on-ink: #dee1e0; /* text on dark sections */
   --on-ink-muted: #a4aaa2;
   --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  interpolate-size: allow-keywords; /* lets the accordion animate to "auto" height */
 }
 
 @theme inline {
   --color-paper: var(--paper);
+  --color-band: var(--band);
   --color-surface: var(--surface);
   --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
   --color-grid: var(--grid);
   --color-stone: var(--stone);
   --color-muted: var(--muted);
@@ -34,6 +40,7 @@
   --color-ink-2: var(--ink-2);
   --color-ink: var(--ink);
   --color-blue: var(--blue);
+  --color-blue-deep: var(--blue-deep);
   --color-blue-soft: var(--blue-soft);
   --color-blue-mist: var(--blue-mist);
   --color-on-ink: var(--on-ink);
@@ -79,21 +86,83 @@ body {
   letter-spacing: -0.022em;
 }
 
-/* Text that sits on the hero's dash field gets a paper "knockout" behind each line */
-.knockout {
-  background: var(--paper);
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-  padding: 0 0.12em;
+/* ───────── Pill buttons ───────── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-radius: 999px;
+  padding: 0.8rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  transition:
+    background-color 0.3s var(--ease-out-soft),
+    color 0.3s var(--ease-out-soft),
+    box-shadow 0.3s var(--ease-out-soft),
+    transform 0.3s var(--ease-out-soft);
+}
+.pill:hover {
+  transform: translateY(-1px);
+}
+.pill:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+.pill-arrow {
+  display: inline-block;
+  transition: transform 0.35s var(--ease-out-soft);
+}
+.pill:hover .pill-arrow {
+  transform: translateX(3px);
+}
+.pill--solid {
+  background: var(--blue);
+  color: #fff;
+}
+.pill--solid:hover {
+  background: var(--blue-deep);
+  box-shadow: 0 10px 24px -12px rgb(1 73 253 / 0.7);
+}
+.pill--light {
+  background: #fff;
+  color: var(--blue);
+}
+.pill--light:hover {
+  background: var(--blue-mist);
+}
+.pill--outline {
+  box-shadow: inset 0 0 0 1px currentColor;
+  padding: 0.6rem 1.15rem;
+  font-size: 0.875rem;
+}
+.pill--outline:hover {
+  background: rgb(1 73 253 / 0.06);
 }
 
-/* Big hero headline: one padded paper block, roomy enough to hold the tall
-   "$" above the cap height and the comma's tail below the baseline */
-.knockout-block {
-  display: inline-block;
-  background: var(--paper);
-  padding: 0.32em 0.18em 0.14em;
-  margin-left: -0.18em;
+/* Round icon button (arrows, plus, socials) */
+.ring-btn {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px currentColor;
+  transition:
+    background-color 0.3s var(--ease-out-soft),
+    color 0.3s var(--ease-out-soft),
+    transform 0.4s var(--ease-out-soft);
+}
+
+/* Animated underline for text links */
+.link-underline {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.4s var(--ease-out-soft);
+  padding-bottom: 2px;
+}
+.link-underline:hover,
+.link-underline:focus-visible,
+.link-underline[aria-current="page"] {
+  background-size: 100% 1px;
 }
 
 /* ───────── Scroll reveal (only when JS is running) ───────── */
@@ -108,178 +177,34 @@ body {
 .js [data-reveal="up"] {
   transform: translate3d(0, 28px, 0);
 }
-.js [data-reveal="left"] {
-  transform: translate3d(-100px, 0, 0);
+/* "draw": the wrapper's child wipes in from the left (dashed trajectory line).
+   The clip sits on the child so the observed wrapper still counts as visible. */
+.js [data-reveal="draw"] {
+  opacity: 1;
 }
-.js [data-reveal="right"] {
-  transform: translate3d(100px, 0, 0);
+.js [data-reveal="draw"] > * {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.8s var(--ease-out-soft);
+  transition-delay: var(--reveal-delay, 0ms);
 }
 .js [data-reveal].is-in {
   opacity: 1;
   transform: none;
 }
-
-/* ───────── Slash → arrow (nav links and buttons) ───────── */
-.slash {
-  position: relative;
-  display: inline-block;
-  flex: none;
-  width: 1.75rem;
-  height: 1rem;
-  vertical-align: middle;
-}
-.slash::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 1rem;
-  height: 1px;
-  background: currentColor;
-  transform: translate(-50%, -50%) rotate(-62deg);
-  transition:
-    transform 0.45s var(--ease-out-soft),
-    width 0.45s var(--ease-out-soft);
-}
-.slash::after {
-  content: "";
-  position: absolute;
-  right: 0.12rem;
-  top: 50%;
-  width: 0.42rem;
-  height: 0.42rem;
-  border-top: 1px solid currentColor;
-  border-right: 1px solid currentColor;
-  opacity: 0;
-  transform: translateY(-50%) rotate(45deg) scale(0.3);
-  transition:
-    opacity 0.3s var(--ease-out-soft),
-    transform 0.45s var(--ease-out-soft);
-}
-.group:hover .slash::before,
-.group:focus-visible .slash::before,
-.group[aria-current="page"] .slash::before {
-  width: 1.55rem;
-  transform: translate(-50%, -50%) rotate(0deg);
-}
-.group:hover .slash::after,
-.group:focus-visible .slash::after,
-.group[aria-current="page"] .slash::after {
-  opacity: 1;
-  transform: translateY(-50%) rotate(45deg) scale(1);
+.js [data-reveal="draw"].is-in > * {
+  clip-path: inset(0 0 0 0);
 }
 
-/* Outlined button with a slash; fills on hover */
-.slash-btn {
-  --btn-fg: var(--blue);
-  --btn-fill: var(--blue);
-  --btn-fg-hover: #fff;
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2.5rem;
-  min-width: 13rem;
-  padding: 0.95rem 1.1rem 0.95rem 1.35rem;
-  border: 1px solid var(--btn-fg);
-  color: var(--btn-fg);
-  font-weight: 500;
-  transition: color 0.45s var(--ease-out-soft);
+/* Trajectory dots gently pulse */
+.pulse-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pulse-dot 2.8s ease-in-out infinite;
 }
-.slash-btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--btn-fill);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.55s var(--ease-out-soft);
-}
-.slash-btn:hover,
-.slash-btn:focus-visible {
-  color: var(--btn-fg-hover);
-}
-.slash-btn:hover::before,
-.slash-btn:focus-visible::before {
-  transform: scaleX(1);
-}
-.slash-btn:focus-visible {
-  outline: 2px solid var(--btn-fg);
-  outline-offset: 3px;
-}
-.slash-btn--light {
-  --btn-fg: #fff;
-  --btn-fill: #fff;
-  --btn-fg-hover: var(--blue);
-}
-
-/* ───────── Decorative bands ───────── */
-
-/* Diagonal hatching that slowly marches sideways */
-.hatch {
-  background-image: linear-gradient(
-    135deg,
-    transparent 46%,
-    currentColor 46%,
-    currentColor 54%,
-    transparent 54%
-  );
-  background-size: 18px 18px;
-  animation: hatch-march 2.4s linear infinite;
-}
-@keyframes hatch-march {
-  to {
-    background-position: 18px 0;
-  }
-}
-
-/* Slow-moving blue gradient for the call-to-action band */
-.aurora {
-  background-color: var(--blue);
-  background-image:
-    radial-gradient(38% 55% at 82% 28%, rgb(127 164 255 / 0.55), transparent 70%),
-    radial-gradient(45% 65% at 12% 85%, rgb(14 23 30 / 0.55), transparent 70%),
-    radial-gradient(30% 45% at 62% 90%, rgb(1 40 160 / 0.8), transparent 70%),
-    radial-gradient(25% 40% at 35% 15%, rgb(255 255 255 / 0.16), transparent 70%);
-  background-size: 180% 180%;
-  animation: aurora-drift 22s ease-in-out infinite alternate;
-}
-@keyframes aurora-drift {
-  0% {
-    background-position: 0% 0%;
-  }
+@keyframes pulse-dot {
   50% {
-    background-position: 60% 40%;
-  }
-  100% {
-    background-position: 100% 100%;
-  }
-}
-
-/* "Scroll" cue: a hairline with a travelling segment */
-.scroll-cue-line {
-  position: relative;
-  width: 1px;
-  height: 6.5rem;
-  overflow: hidden;
-  background: rgb(1 73 253 / 0.2);
-}
-.scroll-cue-line::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: -40%;
-  width: 1px;
-  height: 40%;
-  background: var(--blue);
-  animation: scroll-cue 2.4s var(--ease-out-soft) infinite;
-}
-@keyframes scroll-cue {
-  to {
-    top: 100%;
+    transform: scale(1.35);
+    opacity: 0.75;
   }
 }
 
@@ -295,9 +220,39 @@ body {
   }
 }
 
+/* ───────── Investment logic accordion ───────── */
+.accordion details::details-content {
+  block-size: 0;
+  overflow-y: clip;
+  transition:
+    block-size 0.55s var(--ease-out-soft),
+    content-visibility 0.55s allow-discrete;
+}
+.accordion details[open]::details-content {
+  block-size: auto;
+}
+.accordion summary {
+  list-style: none;
+  cursor: pointer;
+}
+.accordion summary::-webkit-details-marker {
+  display: none;
+}
+.accordion .plus-icon {
+  transition: transform 0.45s var(--ease-out-soft);
+}
+.accordion details[open] .plus-icon {
+  transform: rotate(45deg);
+}
+.accordion summary:hover .ring-btn,
+.accordion summary:focus-visible .ring-btn {
+  background: var(--blue);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px var(--blue);
+}
+
 /* ───────── Investment logic copy (content/strategy.md) ───────── */
 .logic-prose {
-  counter-reset: section;
   color: var(--ink-2);
   font-size: 1.125rem;
   line-height: 1.75;
@@ -305,31 +260,8 @@ body {
 .logic-prose > * + * {
   margin-top: 1.15em;
 }
-.logic-prose h2 {
-  counter-increment: section;
-  margin-top: 5rem;
-  font-family: var(--font-display-serif), ui-serif, Georgia, serif;
-  font-weight: 400;
-  font-size: clamp(2.1rem, 4vw, 3rem);
-  line-height: 1.05;
-  letter-spacing: -0.015em;
-  color: var(--ink);
-  scroll-margin-top: 7rem;
-}
-.logic-prose h2::before {
-  content: counter(section, decimal-leading-zero) " /";
-  display: block;
-  margin-bottom: 0.9rem;
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  color: var(--blue);
-}
-.logic-prose h2:first-child {
-  margin-top: 0;
-}
 .logic-prose h3 {
-  margin-top: 2.2em;
+  margin-top: 2em;
   font-size: 1.15rem;
   font-weight: 600;
   color: var(--ink);
@@ -371,13 +303,13 @@ body {
   color: var(--ink);
 }
 .logic-prose hr {
-  border-color: var(--line);
-  margin: 4.5rem 0 2rem;
+  border-color: var(--line-strong);
+  margin: 2.5rem 0 1.5rem;
 }
 .logic-prose code {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
   font-size: 0.88em;
-  background: rgb(222 225 224 / 0.6);
+  background: rgb(201 205 202 / 0.45);
   padding: 0.1em 0.35em;
   border-radius: 4px;
 }
@@ -387,28 +319,32 @@ body {
   html {
     scroll-behavior: auto;
   }
-  .js [data-reveal] {
+  .js [data-reveal],
+  .js [data-reveal="draw"] > * {
     opacity: 1 !important;
     transform: none !important;
+    clip-path: none !important;
     transition: none !important;
   }
-  .hatch,
-  .aurora,
-  .menu-item,
-  .scroll-cue-line::after {
+  .pulse-dot,
+  .menu-item {
     animation: none;
   }
-  .slash::before,
-  .slash::after,
-  .slash-btn,
-  .slash-btn::before {
+  .pill,
+  .pill-arrow,
+  .ring-btn,
+  .link-underline,
+  .accordion .plus-icon,
+  .accordion details::details-content {
     transition: none;
   }
 }
 
 @media print {
-  .js [data-reveal] {
+  .js [data-reveal],
+  .js [data-reveal="draw"] > * {
     opacity: 1 !important;
     transform: none !important;
+    clip-path: none !important;
   }
 }

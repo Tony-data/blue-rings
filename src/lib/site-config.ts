@@ -19,14 +19,19 @@ export const CONTACT = {
 };
 
 /**
- * Photo behind the statement card (Bondi, Sydney), made from
- * Branding/Tony's photo of Aus Water.jpg. Shown without a credit.
+ * Water photo used in the hero and the investment logic band (Bondi, Sydney),
+ * made from Branding/Tony's photo of Aus Water.jpg. Shown without a credit.
  */
 export const BANNER_PHOTO = "/brand/bondi-water.webp";
 
-/** The statement over the banner on the home page. */
+/** Home page intro: heading on the left, statement on the right. */
+export const INTRO_TITLE = "A personal track record.";
 export const STATEMENT =
-  "A personal track record on Polymarket. Every figure on this page is pulled live from my wallet and refreshed every fifteen minutes.";
+  "Every figure on this page is pulled live from my Polymarket wallet and refreshed every fifteen minutes. No open positions are shown.";
+
+/** Investment logic page intro. */
+export const LOGIC_INTRO =
+  "Open a section to read more. These notes are in my own words and change as my process evolves.";
 
 export const DISCLAIMER =
   "A personal track record, shared privately. Past results don’t predict future ones, and nothing here is financial advice.";
