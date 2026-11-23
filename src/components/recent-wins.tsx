@@ -1,4 +1,4 @@
-import { cents, shortDate, signedMoney, signedPercent } from "@/lib/format";
+import { cents, shortDate, signedMoney } from "@/lib/format";
 import type { Win } from "@/lib/types";
 
 export function RecentWins({ wins, best }: { wins: Win[]; best: Win | null }) {
@@ -17,7 +17,6 @@ export function RecentWins({ wins, best }: { wins: Win[]; best: Win | null }) {
       ) : (
         <ol className="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-surface">
           {wins.map((w) => {
-            const ret = w.cost && w.cost > 0 ? w.profit / w.cost : null;
             return (
               <li key={w.id} className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 px-5 py-4 sm:grid-cols-[7.5rem_1fr_auto] sm:px-6">
                 <span className="eyebrow order-3 col-span-2 text-muted sm:order-none sm:col-span-1">
@@ -32,10 +31,7 @@ export function RecentWins({ wins, best }: { wins: Win[]; best: Win | null }) {
                     </p>
                   )}
                 </div>
-                <div className="text-right">
-                  <p className="text-lg font-semibold text-blue tabular">{signedMoney(w.profit)}</p>
-                  {ret !== null && <p className="text-xs text-muted tabular">{signedPercent(ret)} return</p>}
-                </div>
+                <p className="text-right text-lg font-semibold text-blue tabular">{signedMoney(w.profit)}</p>
               </li>
             );
           })}

@@ -15,8 +15,6 @@ export type Win = {
   avgPrice: number | null;
   /** Realised profit in USD. */
   profit: number;
-  /** Cost basis in USD, used for the return %. */
-  cost: number | null;
   /** When the position was closed (epoch ms). */
   closedAt: number | null;
 };

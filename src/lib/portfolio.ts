@@ -120,7 +120,6 @@ function toWin(row: RawPosition, index: number): Win | null {
     outcome: row.outcome?.trim() || null,
     avgPrice: typeof row.avg_price === "number" ? row.avg_price : null,
     profit,
-    cost: row.total_cost_usdc ?? row.entry_cost_usdc ?? null,
     closedAt: toMs(row.last_event_at),
   };
 }

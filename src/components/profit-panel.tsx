@@ -46,7 +46,10 @@ export function ProfitPanel({ series }: { series: PnlPoint[] }) {
     return series.slice(Math.max(0, startIdx - 1));
   }, [series, active.days]);
 
-  const change = data.length > 1 ? data[data.length - 1].v - data[0].v : 0;
+  // "All" is measured from zero so it matches the all-time headline; other
+  // ranges are measured from the first point in the range.
+  const baseline = active.days === Infinity ? 0 : (data[0]?.v ?? 0);
+  const change = data.length ? data[data.length - 1].v - baseline : 0;
   const values = data.map((p) => p.v);
   const max = Math.max(0, ...values);
   const min = Math.min(0, ...values);
@@ -92,7 +95,7 @@ export function ProfitPanel({ series }: { series: PnlPoint[] }) {
         </p>
 
         {showTable ? (
-          <MonthlyTable data={data} />
+          <MonthlyTable data={data} baseline={baseline} />
         ) : (
           <div className="mt-6 h-[300px] sm:h-[360px]" aria-label={`Cumulative profit chart, ${active.phrase}`}>
             <ResponsiveContainer width="100%" height="100%">
@@ -175,7 +178,7 @@ function ChartTooltip({ active, payload }: Pick<TooltipContentProps, "active" | 
 }
 
 /** Table view: profit made in each month, plus the running total. */
-function MonthlyTable({ data }: { data: PnlPoint[] }) {
+function MonthlyTable({ data, baseline }: { data: PnlPoint[]; baseline: number }) {
   const rows = useMemo(() => {
     const byMonth = new Map<string, { t: number; end: number }>();
     for (const p of data) {
@@ -184,7 +187,7 @@ function MonthlyTable({ data }: { data: PnlPoint[] }) {
       byMonth.set(key, { t: Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1), end: p.v });
     }
     const months = [...byMonth.values()];
-    let prev = data[0]?.v ?? 0;
+    let prev = baseline;
     return months
       .map((m) => {
         const row = { t: m.t, change: m.end - prev, total: m.end };
@@ -192,7 +195,7 @@ function MonthlyTable({ data }: { data: PnlPoint[] }) {
         return row;
       })
       .reverse();
-  }, [data]);
+  }, [data, baseline]);
 
   return (
     <div className="mt-6 max-h-[360px] overflow-auto">
