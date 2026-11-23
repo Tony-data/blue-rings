@@ -1,64 +1,87 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { logout } from "@/app/actions";
+import { LinkedInLogo, MailIcon, XLogo } from "@/components/icons";
 import { CONTACT, DISCLAIMER } from "@/lib/site-config";
 import { getStrategy } from "@/lib/strategy";
 
+const isReal = (href: string) => href !== "#" && href !== "";
+
+/**
+ * Footer laid out like the v2 (Citadel-style) design — logo left, link
+ * columns right, a bottom row with lock / note / round social icons, then
+ * the disclaimer — in the current light palette.
+ */
 export async function SiteFooter() {
   const { headings } = await getStrategy();
+  const x = CONTACT.links.find((l) => /x\.com|twitter/i.test(l.href));
+  const linkedin = CONTACT.links.find((l) => /linkedin/i.test(l.label));
+
+  const socials = [
+    x && isReal(x.href) ? { href: x.href, label: "Blue Rings on X", icon: <XLogo /> } : null,
+    linkedin && isReal(linkedin.href) ? { href: linkedin.href, label: "LinkedIn", icon: <LinkedInLogo /> } : null,
+    { href: `mailto:${CONTACT.email}`, label: "Email", icon: <MailIcon /> },
+  ].filter(Boolean) as { href: string; label: string; icon: ReactNode }[];
 
   return (
     <footer className="border-t border-line bg-paper">
-      <div className="mx-auto max-w-7xl px-5 pt-20 pb-8 sm:px-8 sm:pt-24">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-[repeat(3,minmax(0,1fr))_minmax(0,1.4fr)] lg:gap-10">
-          <Column title="Overview" href="/">
-            <FooterLink href="/#performance">Performance</FooterLink>
-            <FooterLink href="/#wins">Recent wins</FooterLink>
-          </Column>
+      <div className="mx-auto max-w-7xl px-5 pt-20 sm:px-8 sm:pt-24">
+        <div className="flex flex-col gap-14 lg:flex-row lg:justify-between">
+          <Link href="/" className="flex items-center gap-3 self-start" aria-label="Blue Rings home">
+            <Image src="/brand/mark.png" alt="" width={48} height={41} className="h-9 w-auto" />
+            <span className="display text-[2rem] leading-none text-blue">Blue Rings</span>
+            <span className="ml-1 hidden border-l border-line pl-4 text-sm text-muted sm:inline">Prediction-market portfolio</span>
+          </Link>
 
-          <Column title="Investment logic" href="/investment-logic">
-            {headings.map((h) => (
-              <FooterLink key={h.id} href={`/investment-logic#${h.id}`}>
-                {h.text}
-              </FooterLink>
-            ))}
-          </Column>
-
-          <Column title="Contact">
-            <FooterLink href={`mailto:${CONTACT.email}`}>{CONTACT.email}</FooterLink>
-            <li className="text-sm text-slate">{CONTACT.location}</li>
-            {CONTACT.links.map((l) => (
-              <FooterLink key={l.label} href={l.href}>
-                {l.label}
-              </FooterLink>
-            ))}
-          </Column>
-
-          <div className="col-span-2 lg:col-span-1 lg:pl-10">
-            <p className="text-sm font-semibold text-blue">Disclaimer</p>
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate">{DISCLAIMER}</p>
-            <form action={logout} className="mt-6">
-              <button type="submit" className="group inline-flex items-center gap-1 text-sm font-medium text-blue">
-                Lock site
-                <span className="slash" aria-hidden />
-              </button>
-            </form>
+          <div className="grid grid-cols-2 gap-x-10 gap-y-12 sm:grid-cols-3 lg:gap-x-20">
+            <Column title="Overview" href="/">
+              <FooterLink href="/#performance">Performance</FooterLink>
+              <FooterLink href="/#wins">Recent wins</FooterLink>
+            </Column>
+            <Column title="Investment logic" href="/investment-logic">
+              {headings.map((h) => (
+                <FooterLink key={h.id} href={`/investment-logic#${h.id}`}>
+                  {h.text}
+                </FooterLink>
+              ))}
+            </Column>
+            <Column title="Contact">
+              <FooterLink href={`mailto:${CONTACT.email}`}>{CONTACT.email}</FooterLink>
+              <li className="text-sm text-slate">{CONTACT.location}</li>
+              {CONTACT.links.filter((l) => isReal(l.href)).map((l) => (
+                <FooterLink key={l.label} href={l.href}>
+                  {l.label}
+                </FooterLink>
+              ))}
+            </Column>
           </div>
         </div>
 
-        {/* "Blue Rings" is ~4.49em wide in the display serif: sized to fill the content width. */}
-        <p
-          aria-hidden
-          data-reveal="up"
-          className="display mt-24 -ml-[0.03em] select-none whitespace-nowrap pb-[0.12em] text-[calc((100vw-2.5rem)/4.6)] leading-[0.85] text-blue sm:mt-32 sm:text-[min(calc((100vw-4rem)/4.6),16.75rem)]"
-        >
-          Blue Rings
-        </p>
-
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-6 text-xs text-muted">
-          <span>Blue Rings · Private portfolio</span>
-          <span>Figures refresh every 15 minutes</span>
+        <div className="mt-20 flex flex-col items-start gap-6 border-t border-line py-8 md:flex-row md:items-center md:justify-between">
+          <form action={logout}>
+            <button type="submit" className="group inline-flex items-center gap-1 text-sm font-medium text-blue">
+              Lock site
+              <span className="slash" aria-hidden />
+            </button>
+          </form>
+          <p className="text-xs text-muted md:text-center">Blue Rings · Private portfolio · Figures refresh every 15 minutes</p>
+          <ul className="flex items-center gap-4">
+            {socials.map((s) => (
+              <li key={s.label}>
+                <a
+                  href={s.href}
+                  aria-label={s.label}
+                  {...(s.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className="ring-btn size-11 text-blue hover:bg-blue hover:text-white"
+                >
+                  {s.icon}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
+        <p className="border-t border-line py-7 text-xs leading-relaxed text-muted">{DISCLAIMER}</p>
       </div>
     </footer>
   );
@@ -68,20 +91,19 @@ function Column({ title, href, children }: { title: string; href?: string; child
   return (
     <div>
       {href ? (
-        <Link href={href} className="block text-sm font-semibold text-blue hover:underline hover:underline-offset-4">
+        <Link href={href} className="link-underline text-sm font-semibold text-blue">
           {title}
         </Link>
       ) : (
-        <p className="block text-sm font-semibold text-blue">{title}</p>
+        <p className="text-sm font-semibold text-blue">{title}</p>
       )}
-      <ul className="mt-5 space-y-3">{children}</ul>
+      <ul className="mt-5 space-y-3.5">{children}</ul>
     </div>
   );
 }
 
 function FooterLink({ href, children }: { href: string; children: ReactNode }) {
-  const className =
-    "text-sm text-slate underline decoration-transparent underline-offset-4 transition-colors duration-300 [overflow-wrap:anywhere] hover:text-blue hover:decoration-blue";
+  const className = "link-underline text-sm text-slate [overflow-wrap:anywhere] transition-colors duration-300 hover:text-blue";
   return (
     <li>
       {/^https?:\/\//.test(href) ? (
