@@ -39,7 +39,9 @@ type Page<T> = {
 };
 
 const ATTEMPTS = 3;
-const RETRYABLE = new Set([408, 425, 429, 500, 502, 503, 504]);
+// 429 (rate limited) is deliberately not here: retrying straight away only
+// extends the limit. It's retried only when the API says how long to wait.
+const RETRYABLE = new Set([408, 425, 500, 502, 503, 504]);
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /** GET with retries on rate limits, server errors and timeouts. */
@@ -58,10 +60,15 @@ async function getJson<T>(path: string, params: Record<string, string>): Promise
       if (res.ok) return (await res.json()) as T;
 
       const body = (await res.text().catch(() => "")).replace(/\s+/g, " ").slice(0, 160);
-      lastError = new Error(`Polymarket ${path} returned HTTP ${res.status}${body ? `: ${body}` : ""}`);
-      if (!RETRYABLE.has(res.status)) break;
+      const wait = res.headers.get("retry-after");
+      lastError = new Error(
+        `Polymarket ${path} returned HTTP ${res.status}${wait ? ` (retry after ${wait}s)` : ""}${body ? `: ${body}` : ""}`,
+      );
       const retryAfter = Number(res.headers.get("retry-after"));
-      if (Number.isFinite(retryAfter) && retryAfter > 0) retryAfterMs = retryAfter * 1000;
+      const shortWait = Number.isFinite(retryAfter) && retryAfter > 0 && retryAfter <= 5;
+      if (res.status === 429 && !shortWait) break;
+      if (res.status !== 429 && !RETRYABLE.has(res.status)) break;
+      if (shortWait) retryAfterMs = retryAfter * 1000;
     } catch (error) {
       const reason = error instanceof Error ? `${error.name}: ${error.message}` : String(error);
       lastError = new Error(`Polymarket ${path} request failed (${reason})`);
