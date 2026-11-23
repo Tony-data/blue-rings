@@ -21,7 +21,7 @@ export default function LoginPage() {
 
       <div className="relative w-full max-w-sm rounded-2xl border border-line bg-surface/95 p-8 shadow-[0_24px_60px_-30px_rgba(14,23,30,0.45)] backdrop-blur-sm">
         <Image src="/brand/mark.png" alt="" width={56} height={48} className="h-12 w-auto" />
-        <h1 className="mt-6 text-2xl font-semibold tracking-tight text-ink">Blue Rings</h1>
+        <h1 className="display mt-6 text-4xl leading-none text-blue">Blue Rings</h1>
         <p className="mt-1 text-sm text-slate">This site is private. Enter the password to continue.</p>
         <LoginForm />
       </div>

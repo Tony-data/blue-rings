@@ -31,7 +31,7 @@ const SLATE = "#4d5558";
 const GRID = "#e7e9e7";
 const AXIS_TEXT = "#646a64";
 const CROSSHAIR = "#989c94";
-const SURFACE = "#fbfbfa";
+const SURFACE = "#f4f5f3";
 
 export function ProfitPanel({ series }: { series: PnlPoint[] }) {
   const [range, setRange] = useState<RangeKey>("ALL");
@@ -60,35 +60,44 @@ export function ProfitPanel({ series }: { series: PnlPoint[] }) {
   return (
     <div>
       {/* Filter row: sits above the chart and scopes everything below it */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div role="group" aria-label="Time range" className="inline-flex rounded-lg border border-line bg-surface p-1">
-          {RANGES.map((r) => (
-            <button
-              key={r.key}
-              type="button"
-              onClick={() => setRange(r.key)}
-              aria-pressed={range === r.key}
-              className={`min-w-11 rounded-md px-3 py-1.5 text-sm font-medium transition ${
-                range === r.key ? "bg-ink text-white" : "text-slate hover:bg-line/60 hover:text-ink"
-              }`}
-            >
-              {r.label}
-            </button>
+      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-y border-blue/25 py-3">
+        <div role="group" aria-label="Time range" className="flex flex-wrap items-center">
+          {RANGES.map((r, i) => (
+            <span key={r.key} className="inline-flex items-center">
+              {i > 0 && (
+                <span aria-hidden className="mx-1.5 text-stone">
+                  /
+                </span>
+              )}
+              <button
+                type="button"
+                onClick={() => setRange(r.key)}
+                aria-pressed={range === r.key}
+                className={`min-w-10 px-1.5 py-1.5 text-sm transition-colors duration-300 ${
+                  range === r.key
+                    ? "text-blue underline decoration-blue decoration-1 underline-offset-[6px]"
+                    : "text-slate hover:text-ink"
+                }`}
+              >
+                {r.label}
+              </button>
+            </span>
           ))}
         </div>
         <button
           type="button"
           onClick={() => setShowTable((v) => !v)}
           aria-expanded={showTable}
-          className="text-sm text-slate underline decoration-line underline-offset-4 transition hover:text-ink hover:decoration-stone"
+          className="group inline-flex items-center gap-1 text-sm text-blue"
         >
           {showTable ? "Show chart" : "View as table"}
+          <span className="slash" aria-hidden />
         </button>
       </div>
 
-      <div className="mt-4 rounded-2xl border border-line bg-surface p-5 sm:p-8">
-        <p className="flex flex-wrap items-baseline gap-x-2">
-          <span className={`text-3xl font-semibold tracking-tight ${pnlTone(change)}`}>
+      <div className="pt-8">
+        <p className="flex flex-wrap items-baseline gap-x-3">
+          <span className={`display text-[clamp(2.75rem,5vw,4rem)] leading-none ${pnlTone(change)}`}>
             {signedMoney(change)}
           </span>
           <span className="text-slate">{active.phrase}</span>
@@ -97,7 +106,7 @@ export function ProfitPanel({ series }: { series: PnlPoint[] }) {
         {showTable ? (
           <MonthlyTable data={data} baseline={baseline} />
         ) : (
-          <div className="mt-6 h-[300px] sm:h-[360px]" aria-label={`Cumulative profit chart, ${active.phrase}`}>
+          <div className="mt-8 h-[300px] sm:h-[400px]" aria-label={`Cumulative profit chart, ${active.phrase}`}>
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
                 <defs>
@@ -201,7 +210,7 @@ function MonthlyTable({ data, baseline }: { data: PnlPoint[]; baseline: number }
     <div className="mt-6 max-h-[360px] overflow-auto">
       <table className="w-full text-sm">
         <caption className="sr-only">Profit by month</caption>
-        <thead className="sticky top-0 bg-surface">
+        <thead className="sticky top-0 bg-paper">
           <tr className="border-b border-line text-left text-slate">
             <th scope="col" className="py-2 pr-4 font-medium">Month</th>
             <th scope="col" className="py-2 pr-4 text-right font-medium">Profit in month</th>

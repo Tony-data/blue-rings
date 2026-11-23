@@ -8,8 +8,12 @@ Open positions are never fetched or shown.
 - **Data:** pulled on the server from Polymarket's public Data API (v2) for the wallet in `src/lib/portfolio.ts`.
   Cached and refreshed at most every 15 minutes. Visitors' browsers never contact Polymarket.
 - **Privacy:** every page sits behind a password screen (`src/proxy.ts`). Search engines are told not to index it.
-- **Strategy text:** edit [`content/strategy.md`](content/strategy.md). It's plain Markdown.
+- **Investment logic page** (`/investment-logic`): edit [`content/strategy.md`](content/strategy.md). It's plain Markdown;
+  each `##` heading becomes a numbered section, an entry in the page's contents list and a footer link.
+- **Contact details, statement and disclaimer:** edit [`src/lib/site-config.ts`](src/lib/site-config.ts) (currently placeholders).
 - **Brand assets:** originals in `Branding/`. The web-ready versions are in `public/brand/`.
+- **Motion:** the dash-field hero, scroll reveals, count-ups and parallax all switch off for visitors who've asked their
+  device to reduce motion.
 
 ## Run it locally
 

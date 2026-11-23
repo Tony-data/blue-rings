@@ -11,9 +11,10 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  // The strategy page copy is read from content/strategy.md at render time.
+  // The investment logic copy (and footer links) are read from content/strategy.md at render time.
   outputFileTracingIncludes: {
     "/": ["./content/**/*"],
+    "/investment-logic": ["./content/**/*"],
   },
   // Private site: tell crawlers not to index anything, even if a URL leaks.
   async headers() {
