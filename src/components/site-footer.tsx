@@ -80,14 +80,19 @@ function Column({ title, href, children }: { title: string; href?: string; child
 }
 
 function FooterLink({ href, children }: { href: string; children: ReactNode }) {
+  const className =
+    "text-sm text-slate underline decoration-transparent underline-offset-4 transition-colors duration-300 [overflow-wrap:anywhere] hover:text-blue hover:decoration-blue";
   return (
     <li>
-      <Link
-        href={href}
-        className="text-sm text-slate underline decoration-transparent underline-offset-4 transition-colors duration-300 [overflow-wrap:anywhere] hover:text-blue hover:decoration-blue"
-      >
-        {children}
-      </Link>
+      {/^https?:\/\//.test(href) ? (
+        <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+          {children}
+        </a>
+      ) : (
+        <Link href={href} className={className}>
+          {children}
+        </Link>
+      )}
     </li>
   );
 }

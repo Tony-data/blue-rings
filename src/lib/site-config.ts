@@ -8,14 +8,25 @@ export const NAV = [
   { href: "/investment-logic", label: "Investment logic" },
 ] as const;
 
-/** Contact details shown in the footer. Placeholders: replace with your own. */
+/** Contact details shown in the footer. Email and LinkedIn are still placeholders. */
 export const CONTACT = {
   email: "you@example.com",
-  location: "City, Country",
+  location: "Sydney, Australia",
   links: [
+    { label: "X / Twitter", href: "https://x.com/EdgePunta" },
     { label: "LinkedIn", href: "#" },
-    { label: "X / Twitter", href: "#" },
   ],
+};
+
+/**
+ * Photo behind the statement card. Free under the Unsplash License
+ * (https://unsplash.com/license); credit is appreciated, not required.
+ */
+export const BANNER_PHOTO = {
+  src: "/brand/bondi-water.webp",
+  caption: "Bondi Beach, Sydney",
+  credit: "Road Trip with Raj / Unsplash",
+  creditUrl: "https://unsplash.com/photos/aerial-view-of-body-of-water-Q-lzt8Uz4Eo",
 };
 
 /** The statement over the banner on the home page. */
