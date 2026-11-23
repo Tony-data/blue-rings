@@ -15,8 +15,19 @@ Open positions are never fetched or shown.
 - **Banner photo:** `Branding/Tony's photo of Aus Water.jpg` (Bondi, Sydney), resized to `public/brand/bondi-water.webp`.
   The same image is on Unsplash as [Q-lzt8Uz4Eo](https://unsplash.com/photos/aerial-view-of-body-of-water-Q-lzt8Uz4Eo),
   whose licence doesn't require a credit. Swap it in `src/lib/site-config.ts`.
-- **Motion:** the dash-field hero, scroll reveals, count-ups and parallax all switch off for visitors who've asked their
-  device to reduce motion.
+- **Motion:** the ring-field hero (`src/components/ring-field.tsx`), scroll reveals, count-ups and parallax all switch off
+  for visitors who've asked their device to reduce motion.
+
+## Design versions
+
+Each design is saved as a git tag, so features can be pulled from it later
+(`git show <tag>:path/to/file` or `git checkout <tag> -- path/to/file`).
+
+| Tag | What it is |
+|---|---|
+| `v3-ring-hero` | **Live.** The original layout with the ring-field top and blue profit panel. |
+| `v2-citadel-style` | Citadel-inspired layout: two-column section intros, figures row with hairlines, news-style recent wins, accordion investment logic, dark footer, Bondi photo with pointer ripples (`ripple-water.tsx`). Also on branch `redesign-v2`. |
+| `v1-millennium-style` | The first design: dash-field hero, slash links throughout. |
 
 ## Run it locally
 
