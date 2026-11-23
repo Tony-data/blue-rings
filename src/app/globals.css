@@ -81,23 +81,6 @@ body {
   letter-spacing: -0.022em;
 }
 
-/* Text that sits on the hero's dash field gets a paper "knockout" behind each line */
-.knockout {
-  background: var(--paper);
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-  padding: 0 0.12em;
-}
-
-/* Big hero headline: one padded paper block, roomy enough to hold the tall
-   "$" above the cap height and the comma's tail below the baseline */
-.knockout-block {
-  display: inline-block;
-  background: var(--paper);
-  padding: 0.32em 0.18em 0.14em;
-  margin-left: -0.18em;
-}
-
 /* ───────── Pill buttons (header and hero panel) ───────── */
 .pill {
   display: inline-flex;
@@ -339,30 +322,6 @@ body {
   }
 }
 
-/* "Scroll" cue: a hairline with a travelling segment */
-.scroll-cue-line {
-  position: relative;
-  width: 1px;
-  height: 6.5rem;
-  overflow: hidden;
-  background: rgb(1 73 253 / 0.2);
-}
-.scroll-cue-line::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: -40%;
-  width: 1px;
-  height: 40%;
-  background: var(--blue);
-  animation: scroll-cue 2.4s var(--ease-out-soft) infinite;
-}
-@keyframes scroll-cue {
-  to {
-    top: 100%;
-  }
-}
-
 /* Mobile menu items rise in one after another */
 .menu-item {
   animation: menu-in 0.7s var(--ease-out-soft) both;
@@ -474,8 +433,7 @@ body {
   }
   .hatch,
   .aurora,
-  .menu-item,
-  .scroll-cue-line::after {
+  .menu-item {
     animation: none;
   }
   .slash::before,
