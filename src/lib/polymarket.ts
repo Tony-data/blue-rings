@@ -49,7 +49,7 @@ async function getJson<T>(path: string, params: Record<string, string>): Promise
 
   let lastError: Error = new Error(`Polymarket ${path} failed`);
   for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
-    let retryAfterMs = 750 * attempt;
+    let retryAfterMs = 2000 * attempt;
     try {
       const res = await fetch(url, {
         headers: { accept: "application/json" },
@@ -81,23 +81,22 @@ export async function fetchPnlSeries(wallet: string): Promise<RawPnlPoint[]> {
   return body.data?.points ?? [];
 }
 
-/** Every closed position, most recently closed first. */
+/**
+ * Every closed position, in the API's default order (we sort by date
+ * ourselves). The default order and modest page size keep this a "light"
+ * query; sorting closed positions by timestamp server-side got rate limited.
+ */
 export async function fetchClosedPositions(
   wallet: string,
-  maxPages = 10,
+  maxPages = 20,
 ): Promise<RawPosition[]> {
-  const anchor = {
-    user: wallet,
-    status: "CLOSED",
-    sort_by: "TIMESTAMP",
-    sort_direction: "DESC",
-  };
+  const anchor = { user: wallet, status: "CLOSED" };
   const rows: RawPosition[] = [];
   let cursor: string | null = null;
 
   for (let page = 0; page < maxPages; page++) {
     // The API wants the same anchor params on every page, plus the cursor.
-    const params: Record<string, string> = cursor ? { ...anchor, cursor } : { ...anchor, limit: "500" };
+    const params: Record<string, string> = cursor ? { ...anchor, cursor } : { ...anchor, limit: "200" };
     const body: Page<RawPosition> = await getJson<Page<RawPosition>>("/positions", params);
     rows.push(...(body.data ?? []));
     cursor = body.pagination?.next_cursor ?? null;
