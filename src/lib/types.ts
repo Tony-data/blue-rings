@@ -28,6 +28,8 @@ export type Portfolio =
       startedAt: number | null;
       series: PnlPoint[];
       profit30d: number | null;
+      /** Set when closed positions couldn't be loaded (profit still shows). */
+      winsError: string | null;
       winRate: number | null;
       marketsClosed: number;
       volumeUsd: number | null;
@@ -40,4 +42,6 @@ export type Portfolio =
       source: "live" | "sample";
       fetchedAt: number;
       message: string;
+      /** Technical detail, shown small (the site is private). */
+      reason: string;
     };

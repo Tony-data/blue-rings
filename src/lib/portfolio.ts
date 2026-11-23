@@ -29,25 +29,46 @@ export async function getPortfolio(): Promise<Portfolio> {
   const wallet = process.env.POLYMARKET_WALLET || DEFAULT_WALLET;
   const now = Date.now();
 
-  try {
-    const [points, closed] =
-      source === "sample"
-        ? [samplePnl(now), sampleClosedPositions(now)]
-        : await Promise.all([fetchPnlSeries(wallet), fetchClosedPositions(wallet)]);
-
+  if (source === "sample") {
     cacheLife({ stale: 300, revalidate: 900, expire: 86_400 });
-    return summarise(source, now, points, closed);
-  } catch (error) {
-    console.error("[portfolio] could not load Polymarket data:", error);
-    // Retry soon rather than caching the failure for long.
-    cacheLife({ stale: 30, revalidate: 60, expire: 300 });
-    return {
-      status: "unavailable",
-      source,
-      fetchedAt: now,
-      message: "Live data from Polymarket is temporarily unavailable. Please check back shortly.",
-    };
+    return summarise(source, now, samplePnl(now), sampleClosedPositions(now), null);
   }
+
+  const [pnl, closed] = await Promise.allSettled([
+    fetchPnlSeries(wallet),
+    fetchClosedPositions(wallet),
+  ]);
+
+  if (pnl.status === "fulfilled") {
+    const winsError = closed.status === "rejected" ? describe(closed.reason) : null;
+    if (winsError) console.error("[portfolio] closed positions failed:", winsError);
+    // A partial result refreshes sooner so the wins come back quickly.
+    if (winsError) cacheLife({ stale: 60, revalidate: 120, expire: 86_400 });
+    else cacheLife({ stale: 300, revalidate: 900, expire: 86_400 });
+    return summarise(source, now, pnl.value, closed.status === "fulfilled" ? closed.value : [], winsError);
+  }
+
+  const reason = describe(pnl.reason);
+  console.error("[portfolio] profit history failed:", reason);
+
+  // During a background refresh, throwing keeps the last good numbers on the
+  // page and Next.js retries on the next visit. During the build there's no
+  // previous version yet, so show a message instead of failing the deploy.
+  if (process.env.NEXT_PHASE !== "phase-production-build") {
+    throw new Error(reason);
+  }
+  cacheLife({ stale: 30, revalidate: 60, expire: 300 });
+  return {
+    status: "unavailable",
+    source,
+    fetchedAt: now,
+    message: "Live data from Polymarket is temporarily unavailable. Please check back shortly.",
+    reason,
+  };
+}
+
+function describe(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
 }
 
 function summarise(
@@ -55,6 +76,7 @@ function summarise(
   now: number,
   points: RawPnlPoint[],
   closed: RawPosition[],
+  winsError: string | null,
 ): Portfolio {
   // Profit = economic P&L: realised + unrealised, after fees, including rebates/rewards.
   const series: PnlPoint[] = points
@@ -102,6 +124,7 @@ function summarise(
     startedAt: trimmed[0]?.t ?? null,
     series: trimmed,
     profit30d,
+    winsError,
     winRate: decided.length ? wins.length / decided.length : null,
     marketsClosed: decided.length,
     volumeUsd: lastRaw?.volume_usdc ?? null,

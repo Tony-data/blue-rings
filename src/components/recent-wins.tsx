@@ -1,7 +1,16 @@
 import { cents, shortDate, signedMoney } from "@/lib/format";
 import type { Win } from "@/lib/types";
 
-export function RecentWins({ wins, best }: { wins: Win[]; best: Win | null }) {
+export function RecentWins({ wins, best, error }: { wins: Win[]; best: Win | null; error: string | null }) {
+  if (error) {
+    return (
+      <div className="rounded-2xl border border-line bg-surface p-6">
+        <p className="text-ink">Closed positions couldn&rsquo;t be loaded from Polymarket just now. They&rsquo;ll reappear on the next refresh.</p>
+        <p className="mt-3 font-mono text-xs break-words text-muted">Details: {error}</p>
+      </div>
+    );
+  }
+
   return (
     <div>
       {best && (

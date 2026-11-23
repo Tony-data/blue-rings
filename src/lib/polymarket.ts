@@ -38,18 +38,37 @@ type Page<T> = {
   pagination?: { has_more?: boolean; next_cursor?: string | null };
 };
 
+const ATTEMPTS = 3;
+const RETRYABLE = new Set([408, 425, 429, 500, 502, 503, 504]);
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** GET with retries on rate limits, server errors and timeouts. */
 async function getJson<T>(path: string, params: Record<string, string>): Promise<T> {
   const url = new URL(BASE + path);
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
 
-  const res = await fetch(url, {
-    headers: { accept: "application/json" },
-    signal: AbortSignal.timeout(TIMEOUT_MS),
-  });
-  if (!res.ok) {
-    throw new Error(`Polymarket ${path} returned HTTP ${res.status}`);
+  let lastError: Error = new Error(`Polymarket ${path} failed`);
+  for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
+    let retryAfterMs = 750 * attempt;
+    try {
+      const res = await fetch(url, {
+        headers: { accept: "application/json" },
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+      });
+      if (res.ok) return (await res.json()) as T;
+
+      const body = (await res.text().catch(() => "")).replace(/\s+/g, " ").slice(0, 160);
+      lastError = new Error(`Polymarket ${path} returned HTTP ${res.status}${body ? `: ${body}` : ""}`);
+      if (!RETRYABLE.has(res.status)) break;
+      const retryAfter = Number(res.headers.get("retry-after"));
+      if (Number.isFinite(retryAfter) && retryAfter > 0) retryAfterMs = retryAfter * 1000;
+    } catch (error) {
+      const reason = error instanceof Error ? `${error.name}: ${error.message}` : String(error);
+      lastError = new Error(`Polymarket ${path} request failed (${reason})`);
+    }
+    if (attempt < ATTEMPTS) await sleep(Math.min(retryAfterMs, 5000));
   }
-  return (await res.json()) as T;
+  throw lastError;
 }
 
 /** All-time cumulative profit series, one point per day, oldest first. */

@@ -33,7 +33,7 @@ export default async function Home() {
 
             <section id="wins" aria-labelledby="wins-title" className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
               <SectionHeading id="wins-title" eyebrow="Closed positions" title="Recent wins" />
-              <RecentWins wins={data.recentWins} best={data.bestWin} />
+              <RecentWins wins={data.recentWins} best={data.bestWin} error={data.winsError} />
             </section>
           </>
         ) : (
@@ -41,6 +41,7 @@ export default async function Home() {
             <div className="rounded-2xl border border-line bg-surface p-8">
               <p className="eyebrow text-muted">Performance</p>
               <p className="mt-3 text-lg text-ink">{data.message}</p>
+              <p className="mt-4 font-mono text-xs break-words text-muted">Details: {data.reason}</p>
             </div>
           </section>
         )}
