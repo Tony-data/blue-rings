@@ -42,9 +42,11 @@ export async function getPortfolio(): Promise<Portfolio> {
   if (pnl.status === "fulfilled") {
     const winsError = closed.status === "rejected" ? describe(closed.reason) : null;
     if (winsError) console.error("[portfolio] closed positions failed:", winsError);
-    // Same 15-minute refresh either way: retrying a rate-limited endpoint
-    // more often only keeps it limited.
-    cacheLife({ stale: 300, revalidate: 900, expire: 86_400 });
+    // A partial result (usually the deploy's build server being rate limited)
+    // retries after 5 minutes; a full result refreshes every 15. No faster:
+    // hammering a rate-limited endpoint only keeps it limited.
+    if (winsError) cacheLife({ stale: 60, revalidate: 300, expire: 86_400 });
+    else cacheLife({ stale: 300, revalidate: 900, expire: 86_400 });
     return summarise(source, now, pnl.value, closed.status === "fulfilled" ? closed.value : [], winsError);
   }
 
