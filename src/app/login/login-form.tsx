@@ -58,7 +58,7 @@ function PasswordBox({ shake, pending, invalid }: { shake: boolean; pending: boo
         onSelect={sync}
         onKeyUp={sync}
         onClick={sync}
-        className="login-input block h-16 w-full rounded-none border-0 bg-paper px-6 text-center text-2xl tracking-[0.3em] text-transparent caret-transparent shadow-[0_24px_60px_-34px_rgba(14,23,30,0.4)] outline-none selection:bg-blue/20"
+        className="login-input block h-16 w-full rounded-none border-0 bg-paper px-6 text-center text-2xl tracking-[0.3em] text-transparent caret-transparent outline-none selection:bg-blue/20"
       />
       <div
         aria-hidden
