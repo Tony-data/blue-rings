@@ -34,12 +34,18 @@ export async function SiteFooter() {
             <span className="ml-1 hidden border-l border-line pl-4 text-sm text-muted sm:inline">Prediction-market portfolio</span>
           </Link>
 
-          <div className="grid grid-cols-2 gap-x-10 gap-y-12 sm:grid-cols-3 lg:gap-x-20">
+          <div className="grid grid-cols-2 gap-x-10 gap-y-12 sm:grid-cols-[auto_auto_auto] lg:gap-x-20">
             <Column title="Overview" href="/">
               <FooterLink href="/#performance">Performance</FooterLink>
               <FooterLink href="/#wins">Recent wins</FooterLink>
             </Column>
-            <Column title="Investment logic" href="/investment-logic">
+            {/* six links: two short columns instead of one tall one; full width below the others on phones */}
+            <Column
+              title="Investment logic"
+              href="/investment-logic"
+              split={headings.length}
+              className="order-last col-span-2 sm:order-none sm:col-span-1"
+            >
               {headings.map((h) => (
                 <FooterLink key={h.id} href={`/investment-logic#${h.id}`}>
                   {h.text}
@@ -87,9 +93,22 @@ export async function SiteFooter() {
   );
 }
 
-function Column({ title, href, children }: { title: string; href?: string; children: ReactNode }) {
+function Column({
+  title,
+  href,
+  split,
+  className = "",
+  children,
+}: {
+  title: string;
+  href?: string;
+  /** When set (the number of links), lay the links out in two columns, filling down then across. */
+  split?: number;
+  className?: string;
+  children: ReactNode;
+}) {
   return (
-    <div>
+    <div className={className}>
       {href ? (
         <Link href={href} className="link-underline text-sm font-semibold text-blue">
           {title}
@@ -97,7 +116,16 @@ function Column({ title, href, children }: { title: string; href?: string; child
       ) : (
         <p className="text-sm font-semibold text-blue">{title}</p>
       )}
-      <ul className="mt-5 space-y-3.5">{children}</ul>
+      {split ? (
+        <ul
+          className="mt-5 grid grid-flow-col gap-x-10 gap-y-3.5"
+          style={{ gridTemplateRows: `repeat(${Math.ceil(split / 2)}, auto)` }}
+        >
+          {children}
+        </ul>
+      ) : (
+        <ul className="mt-5 space-y-3.5">{children}</ul>
+      )}
     </div>
   );
 }
