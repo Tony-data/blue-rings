@@ -19,10 +19,12 @@ export const CONTACT = {
 };
 
 /**
- * Photo behind the statement card (Bondi, Sydney), made from
- * Branding/Tony's photo of Aus Water.jpg. Shown without a credit.
+ * Photo behind the statement card: a trading desk with monitors.
+ * Pexels photo 8353831 (https://www.pexels.com/photo/men-using-computer-in-a-office-8353831/),
+ * free under the Pexels License, no credit required. The previous water photo
+ * (/brand/bondi-water.webp, from Branding/) is kept so it can be swapped back.
  */
-export const BANNER_PHOTO = "/brand/bondi-water.webp";
+export const BANNER_PHOTO = "/brand/trading-desk.webp";
 
 /** The statement over the banner on the home page. */
 export const STATEMENT =
