@@ -110,7 +110,7 @@ function Column({
   return (
     <div className={className}>
       {/* a rule under each heading spans the whole column — both sub-columns for Investment logic */}
-      <p className="border-b border-blue/25 pb-3 text-sm leading-5 font-semibold text-blue">
+      <p className="border-b border-line pb-3 text-sm leading-5 font-semibold text-blue">
         {href ? (
           <Link href={href} className="link-underline">
             {title}
