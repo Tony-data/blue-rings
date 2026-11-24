@@ -19,12 +19,13 @@ export const CONTACT = {
 };
 
 /**
- * Photo behind the statement card: a trading desk with monitors.
- * Pexels photo 8353831 (https://www.pexels.com/photo/men-using-computer-in-a-office-8353831/),
- * free under the Pexels License, no credit required. The previous water photo
- * (/brand/bondi-water.webp, from Branding/) is kept so it can be swapped back.
+ * Photo behind the statement card: a horse race, three horses neck and neck.
+ * Pexels photo 12995066 (https://www.pexels.com/photo/men-on-horses-racing-on-competition-12995066/),
+ * 7872x5248 original, free under the Pexels License, no credit required. Stored at 3840px.
+ * Earlier banners are kept so they can be swapped back:
+ * /brand/trading-desk.webp and /brand/bondi-water.webp (from Branding/).
  */
-export const BANNER_PHOTO = "/brand/trading-desk.webp";
+export const BANNER_PHOTO = "/brand/horse-racing.webp";
 
 /** The statement over the banner on the home page. */
 export const STATEMENT =

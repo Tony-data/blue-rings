@@ -7,7 +7,8 @@ export function Statement() {
   return (
     <section aria-label="About this portfolio" className="relative mt-20 sm:mt-28">
       <div className="relative h-[46svh] min-h-[300px] max-h-[560px]">
-        <ParallaxImage src={BANNER_PHOTO} />
+        {/* framed a little above centre so the jockeys' helmets stay in view */}
+        <ParallaxImage src={BANNER_PHOTO} quality={90} position="center 42%" />
       </div>
       <div className="relative -mt-32 sm:-mt-48">
         {/* the card: runs from the left edge to just short of the right, with one big rounded corner */}

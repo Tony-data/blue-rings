@@ -12,10 +12,11 @@ Open positions are never fetched or shown.
   each `##` heading becomes a numbered section, an entry in the page's contents list and a footer link.
 - **Contact details, statement and disclaimer:** edit [`src/lib/site-config.ts`](src/lib/site-config.ts) (currently placeholders).
 - **Brand assets:** originals in `Branding/`. The web-ready versions are in `public/brand/`.
-- **Banner photo:** a trading desk with monitors, [Pexels photo 8353831](https://www.pexels.com/photo/men-using-computer-in-a-office-8353831/)
-  (free under the [Pexels License](https://www.pexels.com/license/), no credit required), resized to
-  `public/brand/trading-desk.webp`. The earlier water photo (`Branding/Tony's photo of Aus Water.jpg` →
-  `public/brand/bondi-water.webp`) is still there. Swap between them in `src/lib/site-config.ts`.
+- **Banner photo:** horse racing, [Pexels photo 12995066](https://www.pexels.com/photo/men-on-horses-racing-on-competition-12995066/)
+  (7872×5248 original, free under the [Pexels License](https://www.pexels.com/license/), no credit required), stored at
+  3840px as `public/brand/horse-racing.webp` and served at quality 90 (allowed in `next.config.ts` → `images.qualities`).
+  Earlier banners are still there: `trading-desk.webp` and `bondi-water.webp` (from `Branding/`). Swap in
+  `src/lib/site-config.ts`. For a sharp banner, start from a photo at least ~4000px wide.
 - **Motion:** the ring-field hero (`src/components/ring-field.tsx`), scroll reveals, count-ups and parallax all switch off
   for visitors who've asked their device to reduce motion.
 

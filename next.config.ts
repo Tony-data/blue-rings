@@ -3,6 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  // 75 is the default; 90 is allowed for the full-width banner photo so it stays sharp.
+  images: {
+    qualities: [75, 90],
+  },
   turbopack: {
     rules: {
       "*.css": {
