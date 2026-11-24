@@ -109,22 +109,25 @@ function Column({
 }) {
   return (
     <div className={className}>
-      {href ? (
-        <Link href={href} className="link-underline text-sm font-semibold text-blue">
-          {title}
-        </Link>
-      ) : (
-        <p className="text-sm font-semibold text-blue">{title}</p>
-      )}
+      {/* a rule under each heading spans the whole column — both sub-columns for Investment logic */}
+      <p className="border-b border-blue/25 pb-3 text-sm leading-5 font-semibold text-blue">
+        {href ? (
+          <Link href={href} className="link-underline">
+            {title}
+          </Link>
+        ) : (
+          title
+        )}
+      </p>
       {split ? (
         <ul
-          className="mt-5 grid grid-flow-col gap-x-10 gap-y-3.5"
+          className="mt-4 grid grid-flow-col gap-x-10 gap-y-3.5"
           style={{ gridTemplateRows: `repeat(${Math.ceil(split / 2)}, auto)` }}
         >
           {children}
         </ul>
       ) : (
-        <ul className="mt-5 space-y-3.5">{children}</ul>
+        <ul className="mt-4 space-y-3.5">{children}</ul>
       )}
     </div>
   );
