@@ -369,6 +369,34 @@ input[type="password"]::-ms-clear {
   display: none;
 }
 
+/* Login box caret: a 2px brand-blue bar that blinks like a normal text cursor.
+   Shown only while the (visually hidden) input has focus. */
+.login-caret {
+  position: relative;
+  display: none;
+  width: 0;
+  height: 1em;
+  vertical-align: middle;
+}
+.login-input:focus ~ .login-overlay .login-caret {
+  display: inline-block;
+}
+.login-caret-bar {
+  position: absolute;
+  left: -1px;
+  top: 50%;
+  width: 2px;
+  height: 1.2em;
+  transform: translateY(-50%);
+  background: var(--blue);
+  animation: caret-blink 1.06s steps(1, end) infinite;
+}
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
 /* Login box: a short head-shake after a wrong password */
 .login-shake {
   animation: login-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
@@ -506,6 +534,7 @@ input[type="password"]::-ms-clear {
   .aurora,
   .menu-item,
   .login-shake,
+  .login-caret-bar,
   .scroll-cue-line::after {
     animation: none;
   }
