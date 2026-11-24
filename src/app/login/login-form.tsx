@@ -4,7 +4,6 @@ import { useActionState, useState, type SyntheticEvent } from "react";
 import { login, type LoginState } from "../actions";
 
 const initial: LoginState = { error: null, tries: 0 };
-const DOT = "•";
 
 /**
  * Just a box with a blinking cursor. Enter submits; a wrong password shakes
@@ -32,8 +31,8 @@ export function LoginForm() {
 
 /**
  * The real input is kept for typing, focus and password managers, but its
- * own text and caret are hidden. An overlay draws the dots and a blue caret
- * at the same spot, so the caret always blinks and lines up in every browser.
+ * own text and caret are hidden. An overlay draws one small blue ring per
+ * character (echoing the ring field) and a blinking blue caret between them.
  */
 function PasswordBox({ shake, pending, invalid }: { shake: boolean; pending: boolean; invalid: boolean }) {
   const [caret, setCaret] = useState({ len: 0, pos: 0 });
@@ -63,14 +62,21 @@ function PasswordBox({ shake, pending, invalid }: { shake: boolean; pending: boo
       />
       <div
         aria-hidden
-        className="login-overlay pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden px-6 text-2xl tracking-[0.3em] whitespace-pre text-ink"
+        className="login-overlay pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden px-6 text-2xl"
+        // rings shrink when a long password would no longer fit (272px is the box's inner width)
+        style={{ "--ring-unit": `${Math.min(18, 272 / Math.max(1, caret.len))}px` } as React.CSSProperties}
       >
-        <span>{DOT.repeat(caret.pos)}</span>
-        <span className="login-caret">
-          {/* re-keyed on every change so the caret stays solid while typing, then blinks */}
-          <span key={`${caret.len}-${caret.pos}`} className="login-caret-bar" />
-        </span>
-        <span>{DOT.repeat(Math.max(0, caret.len - caret.pos))}</span>
+        {Array.from({ length: caret.len + 1 }, (_, i) =>
+          i === caret.pos ? (
+            <span key="caret" className="login-caret">
+              {/* re-keyed on every change so the caret stays solid while typing, then blinks */}
+              <span key={`${caret.len}-${caret.pos}`} className="login-caret-bar" />
+            </span>
+          ) : (
+            // one ring per typed character; keys stay stable so only new rings "pop" in
+            <span key={`r${i < caret.pos ? i : i - 1}`} className="login-ring" />
+          ),
+        )}
       </div>
     </div>
   );
